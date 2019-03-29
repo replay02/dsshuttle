@@ -3,10 +3,11 @@
 ### 소스 내려 받은 후 명령어 순서
 > + npm add @babel/runtime
 > + npm install 
-> + react-native link react-native-cardview
-> + react-native link react-native-maps
-> + react-native link react-native-reanimated
-> + react-native link react-native-gesture-handler
+
+> + ~~react-native link react-native-cardview~~
+> + ~~react-native link react-native-maps~~
+> + ~~react-native link react-native-reanimated~~
+> + ~~react-native link react-native-gesture-handler~~
 
 
 
