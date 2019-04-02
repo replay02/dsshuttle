@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView, View, Image, Text, FlatList, Alert } from 'react-native';
 import BigShuttleContent from './BigShuttleContent';
-// const _basePaddingTop = 45;
 
 const shuttleStationDatas = {
 
@@ -202,9 +201,6 @@ export default class BigShuttleMain extends Component {
             fontWeight: 'bold',
             color: '#fff'
         },
-
-
-
     };
 
     // componentWillReceiveProps(nextProps) {
