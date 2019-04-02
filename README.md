@@ -3,18 +3,12 @@
 ### 소스 내려 받은 후 명령어 순서
 > + npm add @babel/runtime
 > + npm install 
-<<<<<<< HEAD
-> + react-native link react-native-cardview
-> + react-native link react-native-maps
-> + react-native link react-native-reanimated
-> + react-native link react-native-gesture-handler
-=======
 
 > + ~~react-native link react-native-cardview~~
 > + ~~react-native link react-native-maps~~
 > + ~~react-native link react-native-reanimated~~
 > + ~~react-native link react-native-gesture-handler~~
->>>>>>> b9e0808a1e1d76d83b5f466c84fb52718ca5722c
+
 
 
 
@@ -37,8 +31,6 @@
 > + react-native link react-native-maps
 (단, 맵이 19년 3월 22일 기준으로 "Could not resolve all files for configuration ':react-native-maps:debugCompileClasspath'." 버그 있음, 따라서 버전을 강제로 다운 받아야 함 ...버전은 'npm install --save https://github.com/react-native-community/react-native-maps.git#v0.24-rc1')
 > + android manifest에 사용중인 구글맵 api key 수동 추가
-<<<<<<< HEAD
-=======
 
 > 5. 카드 뷰
 > + npm install react-native-cardview --save
@@ -50,4 +42,3 @@
 > 7. 아이콘
 > + npm install --save react-native-vector-icons
 > + react-native link react-native-vector-icons
->>>>>>> b9e0808a1e1d76d83b5f466c84fb52718ca5722c
