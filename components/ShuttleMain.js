@@ -79,7 +79,8 @@ export default class ShuttleMain extends Component {
 
     // 사송
     _goSmallShuttle = () => {
-        Alert.alert(menuTitles[0]);
+        this.props.navigation.navigate('ShuttleTab')
+        
     }
     // 셔틀 
     _goBigShuttle = () => {

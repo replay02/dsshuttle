@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Dimensions, View, StyleSheet } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
-import SafeAreaView from "react-native-safe-area-view";
-import BigShuttleMain from './BigShuttleMain';
+import SmallShuttleMain from './SmallShuttleMain';
 
 export default class ShuttleTab extends Component {
 
@@ -10,15 +9,23 @@ export default class ShuttleTab extends Component {
 
     // }
     static navigationOptions = {
-        headerStyle: { display: "none" },
-
+        title: "사송",
+        headerStyle: {
+            // display: "none",
+            backgroundColor: '#4baec5',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            fontWeight: 'bold',
+            color: '#fff'
+        },
     };
 
     state = {
         index: 0,
         routes: [
-            { key: 'first', title: '셔틀버스' },
-            { key: 'second', title: '사송' },
+            { key: 'tab1', title: '분당->방배' },
+            { key: 'tab2', title: '방배->분당' },
         ],
     };
 
@@ -26,10 +33,10 @@ export default class ShuttleTab extends Component {
     // 화면 구성
     _renderScene = ({ route }) => {
         switch (route.key) {
-            case 'first':
-                return <BigShuttleMain navigation={this.props.navigation} />
-            case 'second':
-                return <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
+            case 'tab1':
+                return <SmallShuttleMain navigation={this.props.navigation} />
+            case 'tab2':
+                return <SmallShuttleMain navigation={this.props.navigation} type={'bangbaeToBundang'} />
             default:
                 return null;
         }
@@ -37,31 +44,32 @@ export default class ShuttleTab extends Component {
 
     render() {
         return (
-            <SafeAreaView
-                forceInset={{ top: 'always', bottom: 'never' }}
-                style={{ flex: 1, backgroundColor: '#ffffff' }}>
-                <View style={{ flex: 1 }}>
-                    <TabView
-                        swipeEnabled={true}
-                        style={{ flex: 1 }}
-                        renderTabBar={props =>
-                            <TabBar
-                                {...props}
-                                labelStyle={{ color: '#4baec5', fontWeight: 'bold' }}
-                                indicatorStyle={{ backgroundColor: '#4baec5' }}
-                                style={{ backgroundColor: '#ffffff' }}
-                            />
-                        }
-                        navigationState={this.state}
+            <View style={{ flex: 1 }}>
+                <TabView
+                    swipeEnabled={true}
+                    style={{ flex: 1 }}
+                    renderTabBar={props =>
+                        <TabBar
+                            {...props}
+                            labelStyle={{fontWeight: 'bold' }}
 
-                        renderScene={(route) =>
-                            this._renderScene(route)
-                        }
-                        onIndexChange={index => this.setState({ index })}
-                        initialLayout={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height }}
-                    />
-                </View>
-            </SafeAreaView>
+                            activeColor={'#4baec5'}
+                            inactiveColor={'#5e5e5e'}
+
+                            indicatorStyle={{ backgroundColor: '#4baec5' }}
+                            tabStyle={{ height: 50 }}
+                            style={{ backgroundColor: '#fff' }}
+                        />
+                    }
+                    navigationState={this.state}
+
+                    renderScene={(route) =>
+                        this._renderScene(route)
+                    }
+                    onIndexChange={index => this.setState({ index })}
+                    initialLayout={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height }}
+                />
+            </View>
         )
     }
 }

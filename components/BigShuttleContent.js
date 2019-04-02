@@ -53,7 +53,7 @@ export default class BigShuttleContent extends Component {
                     cornerRadius={7}>
                     <FlatList
                         horizontal={true}
-                        style={{ lex: 1 ,  }}
+                        style={{ flex: 1 }}
                         keyExtractor={(item, index) => 'key' + index}
                         data={selectedData}
                         
