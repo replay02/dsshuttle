@@ -109,7 +109,8 @@ export default class SmallShuttleMain extends Component {
     };
 
     state = {
-        _clickedIndex: 0
+        _clickedIndex: 0,
+        refreshing: false
     }
 
 
@@ -192,9 +193,22 @@ export default class SmallShuttleMain extends Component {
     }
 
 
+    _onRefresh = () => {
+        // somethis Todo
+        // setTimeout(function () {
+            
+        // }, 1000);
+
+
+        this.setState(state => ({
+            // ...state,
+            refreshing : false
+        }))
+    }
+
     render() {
 
-        const { _clickedIndex } = this.state;
+        const { _clickedIndex, refreshing } = this.state;
 
         const { type } = this.props;
 
@@ -206,6 +220,8 @@ export default class SmallShuttleMain extends Component {
         return (
             <View style={styles.container}>
                 <FlatList
+                    refreshing={refreshing}
+                    onRefresh={this._onRefresh}
                     style={{ flex: 1 }}
                     keyExtractor={(item, index) => 'key' + index}
                     data={isTab2 ? shuttleTimes.bangbae : shuttleTimes.bundang}

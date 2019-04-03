@@ -80,7 +80,6 @@ export default class ShuttleMain extends Component {
     // 사송
     _goSmallShuttle = () => {
         this.props.navigation.navigate('ShuttleTab')
-        
     }
     // 셔틀 
     _goBigShuttle = () => {
@@ -94,7 +93,8 @@ export default class ShuttleMain extends Component {
 
     // 기사님정보
     _goDriverInfo = () => {
-        Alert.alert(menuTitles[3]);
+        //Alert.alert(menuTitles[3]);
+        this.props.navigation.navigate('DriverInfo')
     }
 
     // 기타
