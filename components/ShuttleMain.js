@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Easing, TouchableHighlight, Animated, View, Alert, Text, Dimensions } from 'react-native';
+import { StyleSheet, Easing, TouchableHighlight, Animated, View, Alert, Text, Dimensions, Image } from 'react-native';
 // import { RectButton } from 'react-native-gesture-handler';
 import SafeAreaView from "react-native-safe-area-view";
 
 
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+// const width = Dimensions.get('window').width;
+// const height = Dimensions.get('window').height;
 
 
 const menuTitles = ['사송', '셔틀', '게시판', '기사님 정보', '기타']
@@ -16,65 +16,29 @@ export default class ShuttleMain extends Component {
         navigation: null,
         animatedStartValue: new Animated.Value(0)
     };
-
-    // scale = {
-    //     transform: [
-    //         {
-    //             scale: animatedStartValue.interpolate({
-    //                 inputRange: [0, 1],
-    //                 outputRange: [initialScale, 1]
-    //             })
-    //         }
-    //     ]
-    // };
-
-    // position = {
-    //     transform: [
-    //         {
-    //             translateX: animatedStartValue.interpolate({
-    //                 inputRange: [0, 1],
-    //                 outputRange: [startX - (width / 2) - (width * initialScale / 2), endX]
-    //             })
-    //         },
-    //         {
-    //             translateY: animatedStartValue.interpolate({
-    //                 inputRange: [0, 1],
-    //                 outputRange: [startY - (height / 2) - (height * initialScale / 2), endY]
-    //             })
-    //         }
-    //     ]
-    // };
-
-
+    static navigationOptions = {
+        header: null,
+        title: "메인",
+        headerStyle: {
+            backgroundColor: '#4baec5',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            fontWeight: 'bold',
+            color: '#fff'
+        },
+    };
     componentDidMount() {
         this.bootAnimation();
     }
 
     bootAnimation = () => {
-        // Animated.sequence([
-        //     Animated.timing(this.state.animatedStartValue, {
-        //         toValue: new Animated.Value(30),
-        //         duration: 2000,
-        //         easing: Easing.ease
-        //     }),
-        //     Animated.timing(this.state.animatedStartValue, {
-        //         toValue: new Animated.Value(-30),
-        //         duration: 2000,
-        //         // delay: 2000,
-        //         easing: Easing.ease
-        //     })
-        // ]).start(event => {
-        //     if (event.finished) {
-        //         this.bootAnimation();
-        //     }
-        // });
 
-
-        Animated.timing(this.state.animatedStartValue, {
-            toValue: 1,
-            duration: 1000,
-            easing: Easing.ease
-        }).start();
+        // Animated.timing(this.state.animatedStartValue, {
+        //     toValue: 1,
+        //     duration: 1000,
+        //     // easing: Easing.ease
+        // }).start();
     }
 
     // 사송
@@ -84,7 +48,6 @@ export default class ShuttleMain extends Component {
     // 셔틀 
     _goBigShuttle = () => {
         this.props.navigation.navigate('BigShuttleMain')
-        // , navigation={this.props.navigation}
     }
     // 게시판
     _goCommonNotice = () => {
@@ -93,7 +56,6 @@ export default class ShuttleMain extends Component {
 
     // 기사님정보
     _goDriverInfo = () => {
-        //Alert.alert(menuTitles[3]);
         this.props.navigation.navigate('DriverInfo')
     }
 
@@ -105,11 +67,12 @@ export default class ShuttleMain extends Component {
     render() {
         return (
             <SafeAreaView forceInset={{ bottom: 'always', top: 'always' }} style={styles.container}>
-                {/* <Animated.View style={this.position}> */}
-                <Animated.Image source={require('../assets/rainy.jpg')}
+                <Image source={require('../assets/rainy.jpg')}
                     blurRadius={2}
-                    style={[styles.image, { opacity: this.state.animatedStartValue }]} />
-                {/* </Animated.View> */}
+                    style={[
+                        styles.image,
+                        // { opacity: this.state.animatedStartValue }
+                    ]} />
 
                 <Text style={styles.mainText}>우리들의 버스 제발 잘 돌아가라~</Text>
 
@@ -161,8 +124,6 @@ export default class ShuttleMain extends Component {
 const styles = StyleSheet.create({
 
     buttonStyle: {
-        // justifyContent: 'center',
-        // alignItems: 'center',
         flex: 1,
         height: 50,
         marginTop: 10
@@ -170,9 +131,6 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        // backgroundColor: 'white',
-
-
     },
     mainText: {
         alignSelf: 'center',
@@ -182,8 +140,6 @@ const styles = StyleSheet.create({
         marginTop: 100,
         color: '#fff',
         fontWeight: 'bold',
-
-        // backgroundColor: '#ccc'
     },
     image: {
         flex: 1,
@@ -192,7 +148,6 @@ const styles = StyleSheet.create({
         height: null,
         resizeMode: 'cover',
     },
-
 
     button: {
         marginRight: 20,
@@ -211,7 +166,6 @@ const styles = StyleSheet.create({
     },
 
     commonButton: {
-
         marginTop: 0,
         paddingTop: 20,
         justifyContent: 'center',

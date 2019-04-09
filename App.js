@@ -14,101 +14,9 @@ import SmallShuttleMain from './components/SmallShuttleMain';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-// 셔틀 스택
-const BigShuttleStack = createStackNavigator(
-  {
-    // BigShuttleMain: BigShuttleMain,
-
-    BigShuttleMain: BigShuttleMain,
-    BigShuttleMapBase: BigShuttleMapBase,
-    DriverInfo: DriverInfo,//dy
-    // Map: MapScene,
-    // Chart: WeatherChart,
-  }, {
-    initialRouteName: 'BigShuttleMain',
-
-    /* 네비게이션 헤더 옵션 */
-    defaultNavigationOptions: {
-      headerStyle: {
-        backgroundColor: '#fff',
-        // shadowColor: '#5bc4ff',
-        shadowRadius: 0,
-        shadowOpacity: 0,
-        shadowOffset: {
-          height: 0,
-        },
-        elevation: 0,  // for android
-        borderBottomWidth: 0  // for ios
-      },
-      headerTintColor: '#000',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
-      // headerTransparent : true
-    },
-  });
-
-
-
-
-// 셔틀 스택
-// const BigShuttleStack = createStackNavigator(
-//   {
-//     // BigShuttleMain: BigShuttleMain,
-
-//     BigShuttleMain : BigShuttleMain,
-//     BigShuttleMapBase: BigShuttleMapBase,
-//     // Map: MapScene,
-//     // Chart: WeatherChart,
-//   }, {
-//     initialRouteName: 'BigShuttleMain',
-
-//     /* 네비게이션 헤더 옵션 */
-//     defaultNavigationOptions: {
-//       headerStyle: {
-//         backgroundColor: '#fff',
-//         // shadowColor: '#5bc4ff',
-//         shadowRadius: 0,
-//         shadowOpacity: 0,
-//         shadowOffset: {
-//           height: 0,
-//         },
-//         elevation: 0,  // for android
-//         borderBottomWidth: 0  // for ios
-//       },
-//       headerTintColor: '#000',
-//       headerTitleStyle: {
-//         fontWeight: 'bold',
-//       },
-//       // headerTransparent : true
-//     },
-//   });
-
-// const TabStack = createStackNavigator(
-//   {
-//     ShuttleTab: ShuttleTab,
-//   }, {
-//     initialRouteName: 'ShuttleTab',
-
-//     /* 네비게이션 헤더 옵션 */
-//     defaultNavigationOptions: {
-//       headerStyle: {
-//         display: "none",
-//         // backgroundColor: '#418cff',
-//       },
-//       // headerTintColor: '#fff',
-//       // headerTitleStyle: {
-//       //   fontWeight: 'bold',
-//       // },
-//     },
-//   });
-
 const mainStack = createStackNavigator(
   {
     Main: ShuttleMain,
-    // TabStack: TabStack,
-    // BigShuttleStack: BigShuttleStack,
-
     BigShuttleMain: BigShuttleMain,
     BigShuttleMapBase: BigShuttleMapBase,
     DriverInfo: DriverInfo, //dy
@@ -145,16 +53,15 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.animatedValue = new Animated.Value(100);
-    this.animatedValue2 = new Animated.Value(0);
+    this.animatedValue = new Animated.Value(0);
 
-    this.translateX = this.animatedValue2.interpolate({
+    this.translateX = this.animatedValue.interpolate({
       inputRange: [0, 0.3, 0.9, 0.95, 1],
       outputRange: [value, 0, 0,-10, 0],
 
     });
 
-    this.translateX2 = this.animatedValue2.interpolate({
+    this.translateX2 = this.animatedValue.interpolate({
       inputRange: [0, 0.3, 1],
       outputRange: [-value, 0, 0],
     });
@@ -167,9 +74,6 @@ export default class App extends React.Component {
   };
 
   componentDidMount() {
-
-
-
     // Animated.transform(this.animatedValue, {
     //   toValue: 1,
     //   friction: 4,
@@ -177,10 +81,10 @@ export default class App extends React.Component {
     //   useNativeDriver: true,
     // }).start();
 
-    Animated.timing(this.animatedValue2, {
+    Animated.timing(this.animatedValue, {
       toValue: 1,
-      delay: 200,
-      duration: 3000,
+      // delay: 200,
+      duration: 2000,
       useNativeDriver: true,
 
     }).start();
@@ -192,20 +96,19 @@ export default class App extends React.Component {
             alignsecond: true,
           });
         }),
-      3000
+      2000
     );
   }
 
 
   render() {
-    let truckStyle = {
-      transform: [{ scale: this.animatedValue }]
-    };
+    // let truckStyle = {
+    //   transform: [{ scale: this.animatedValue }]
+    // };
 
     let scaleText = {
-      transform: [{ scale: this.animatedValue2 }]
+      transform: [{ scale: this.animatedValue }]
     };
-
 
     let trans = {
       transform: [{ translateX: this.translateX }]

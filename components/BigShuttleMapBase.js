@@ -47,6 +47,7 @@ export default class BigShuttleMapBase extends React.Component {
     state = {
         data: this.props.navigation.state.params.data,
         station: this.props.navigation.state.params.station,
+        selectedKey: this.props.navigation.state.params.selectedKey
     }
 
     _draggedValue = new Animated.Value(pannelBottom)
@@ -152,12 +153,12 @@ export default class BigShuttleMapBase extends React.Component {
             extrapolate: 'clamp'
         })
 
-        const { station, data } = this.state;
+        const { station, data, selectedKey } = this.state;
 
         return (
             <SafeAreaView forceInset={{ bottom: 'never' }} style={{ flex: 1, backgroundColor: '#fff' }}
             >
-                <BigShuttleMap station={station} data={data}></BigShuttleMap>
+                <BigShuttleMap selectedKey = {selectedKey} station={station} data={data}></BigShuttleMap>
 
                 <SlidingUpPanel
                     allowDragging={true}

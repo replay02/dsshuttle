@@ -3,6 +3,9 @@ package com.dsshuttle;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.calendarevents.CalendarEventsPackage;
+import com.kevinresol.react_native_default_preference.RNDefaultPreferencePackage;
+import com.levelasquez.androidopensettings.AndroidOpenSettingsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
@@ -28,6 +31,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new CalendarEventsPackage(),
+            new RNDefaultPreferencePackage(),
+            new AndroidOpenSettingsPackage(),
             new VectorIconsPackage(),
             new RNGestureHandlerPackage(),
             new ReanimatedPackage(),

@@ -35,14 +35,15 @@ const shuttleStationDatas = {
         },
 
         {
-            name: '시흥영업소',
+            name: '시흥영업소 버스정류장(안현JC방향)',
             shortname: '시흥영업소',
-            lat: '37.450619',
-            lng: '126.802867',
+            lat: '37.449968',
+            lng: '126.803780',
             arriveTime: '7:25'
         },
 
         {
+            
             name: 'KT 분당 본사',
             shortname: '분당본사',
             lat: '37.358861',
@@ -62,22 +63,22 @@ const shuttleStationDatas = {
         stations: [{
             name: '창동역1번출구 리젠트 호텔 앞',
             shortname: '창동역',
-            lat: '37.468276',
-            lng: '126.708138',
+            lat: '37.653673',
+            lng: '127.050349',
             arriveTime: '7:00'
         },
         {
             name: '태릉입구역 3번출구',
             shortname: '태릉입구역',
-            lat: '37.487468',
-            lng: '126.724777',
+            lat: '37.619113',
+            lng: '127.075011',
             arriveTime: '7:15'
         },
         {
             name: '잠실역6번출구 앞 버스정류장',
             shortname: '잠실역',
-            lat: '37.487003',
-            lng: '126.753020',
+            lat: '37.514084',
+            lng: '127.099474',
             arriveTime: '7:50'
         },
         {
@@ -100,15 +101,15 @@ const shuttleStationDatas = {
         stations: [{
             name: '목동사옥',
             shortname: '목동사옥',
-            lat: '37.468276',
-            lng: '126.708138',
+            lat: '37.530188',
+            lng: '126.876049',
             arriveTime: '7:10'
         },
         {
             name: '오목교역 2번출구',
             shortname: '오목교역',
-            lat: '37.487468',
-            lng: '126.724777',
+            lat: '37.526061',
+            lng: '126.873827',
             arriveTime: '7:13'
         },
         {
@@ -131,22 +132,22 @@ const shuttleStationDatas = {
         stations: [{
             name: '신도림역',
             shortname: '신도림역',
-            lat: '37.468276',
-            lng: '126.708138',
+            lat: '37.509286',
+            lng: '126.888681',
             arriveTime: '7:10'
         },
         {
             name: '마포역 3번출구',
             shortname: '마포역',
-            lat: '37.487468',
-            lng: '126.724777',
+            lat: '37.539767',
+            lng: '126.946613',
             arriveTime: '7:25'
         },
         {
             name: '서울역 14번출구',
             shortname: '서울역',
-            lat: '37.487468',
-            lng: '126.724777',
+            lat: '37.553357',
+            lng: '126.972530',
             arriveTime: '7:45'
         },
         {
@@ -169,8 +170,8 @@ const shuttleStationDatas = {
         stations: [{
             name: '사당역 6번출구 우리은행',
             shortname: '사당역',
-            lat: '37.468276',
-            lng: '126.708138',
+            lat: '37.476417',
+            lng: '126.979746',
             arriveTime: '7:40'
         },
         {
@@ -203,43 +204,25 @@ export default class BigShuttleMain extends Component {
         },
     };
 
-    // componentWillReceiveProps(nextProps) {
-    // }
 
     componentDidMount() {
         this.setState({
         });
     }
 
-    // _findData = (data) => {
-    //     console.log('_findData : ' + data.name);
-    //     var findData = null;
-    //     for (key1 in Object.keys(shuttleStationDatas)) {
-    //         // console.log('key2 : ' + shuttleStationDatas[key].stations[0].name);
-    //         Object.keys(shuttleStationDatas[key1]).filter((key2) => findData = shuttleStationDatas[key1][key2])
-    //         if (findData != null)
-    //             break;
-    //     }
-    //     console.log('findData : ' + findData[0].name);
-    //     return findData;
-    // }
-
-    _clickMethod = (d, selectedTitle) => {
-        console.log('click data : ' + selectedTitle);
-
-        // var d = this._findData(data)
-        var station = shuttleStationDatas[selectedTitle].stations;
-
+    _clickMethod = (data, selectedKey) => {
+        var station = shuttleStationDatas[selectedKey].stations;
         Alert.alert(
             '상세 이름',
-            d.name,
+            data.name,
             [
                 { text: '취소', onPress: () => console.log('Cancel Pressed!') },
                 {
                     text: '지도로 가기', onPress: () => this.props.navigation.navigate('BigShuttleMapBase',
                         {
-                            data: d,
-                            station: station
+                            data: data,
+                            station: station,
+                            selectedKey : selectedKey
                         })
                 }
             ],
@@ -250,25 +233,20 @@ export default class BigShuttleMain extends Component {
 
     render() {
         return (
-            <ScrollView style={{
-                flex: 1
-            }}>
+            <ScrollView style={{ flex: 1 }}>
                 <View style={styles.container}>
+                    <BigShuttleContent title={'인천 노선'} selectedKey={'incheon'} selectedData={shuttleStationDatas.incheon.stations} clickMethod={this._clickMethod}></BigShuttleContent>
 
-                    <BigShuttleContent title={'인천 노선'} selectedTitle={'incheon'} selectedData={shuttleStationDatas.incheon.stations} clickMethod={this._clickMethod}></BigShuttleContent>
+                    <BigShuttleContent title={'잠실 노선'} selectedKey={'jamsil'} selectedData={shuttleStationDatas.jamsil.stations} clickMethod={this._clickMethod}></BigShuttleContent>
 
-                    <BigShuttleContent title={'잠실 노선'} selectedTitle={'jamsil'} selectedData={shuttleStationDatas.jamsil.stations} clickMethod={this._clickMethod}></BigShuttleContent>
+                    <BigShuttleContent title={'목동 노선'} selectedKey={'mokdong'} selectedData={shuttleStationDatas.mokdong.stations} clickMethod={this._clickMethod}></BigShuttleContent>
 
-                    <BigShuttleContent title={'목동 노선'} selectedTitle={'mokdong'} selectedData={shuttleStationDatas.mokdong.stations} clickMethod={this._clickMethod}></BigShuttleContent>
+                    <BigShuttleContent title={'신도림 노선'} selectedKey={'sindorim'} selectedData={shuttleStationDatas.sindorim.stations} clickMethod={this._clickMethod}></BigShuttleContent>
 
-                    <BigShuttleContent title={'신도림 노선'} selectedTitle={'sindorim'} selectedData={shuttleStationDatas.sindorim.stations} clickMethod={this._clickMethod}></BigShuttleContent>
-
-                    <BigShuttleContent title={'사당 노선'} selectedTitle={'sadang'} selectedData={shuttleStationDatas.sadang.stations} clickMethod={this._clickMethod}></BigShuttleContent>
+                    <BigShuttleContent title={'사당 노선'} selectedKey={'sadang'} selectedData={shuttleStationDatas.sadang.stations} clickMethod={this._clickMethod}></BigShuttleContent>
 
                 </View>
             </ScrollView>
-
-
         );
     }
 }
@@ -283,6 +261,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         alignItems: 'flex-start',
+        marginBottom: 30,
+        marginTop: 10
+
     },
     dragHandler: {
         alignSelf: 'stretch',
