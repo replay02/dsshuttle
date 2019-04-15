@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, YellowBox, Alert, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, YellowBox, Alert, Platform, TouchableOpacity,Linking } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
 import Permissions from 'react-native-permissions'
 import AndroidOpenSettings from 'react-native-android-open-settings'
@@ -44,7 +44,7 @@ export default class BigShuttleMap extends Component {
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA
             },
-    
+
             selectedRegion: {}
         };
     }
@@ -108,23 +108,26 @@ export default class BigShuttleMap extends Component {
                 this._requestPermission();
             }
             else {
-                this.setState({ locationPermission: response })
+                // this.setState({ locationPermission: response })
+
+                // 현재 위치 가져오기
+                WATCH_ID = navigator.geolocation.watchPosition((position) => {
+                    let region = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        latitudeDelta: LATITUDE_DELTA,
+                        longitudeDelta: LONGITUDE_DELTA
+                    }
+                    this.state.region = region;
+                    this.setState({
+                        isGetMyLocation: true,
+                        locationPermission: response
+                    });
+                }, (error) => console.log(error));
             }
         })
 
-        // 현재 위치 가져오기
-        WATCH_ID = navigator.geolocation.watchPosition((position) => {
-            let region = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA
-            }
-            this.state.region = region;
-            this.setState({
-                isGetMyLocation: true
-            });
-        }, (error) => console.log(error));
+
     }
 
     // yhkim 확인 필요
@@ -133,7 +136,7 @@ export default class BigShuttleMap extends Component {
         //     navigator.geolocation.clearWatch(WATCH_ID);
         // }
     }
-    
+
 
     _requestPermission = () => {
         Permissions.request('location').then(response => {
@@ -186,15 +189,24 @@ export default class BigShuttleMap extends Component {
 
                 }
                 else if (response == 'denied') {
+                    Alert.alert(
+                        '위치 권한 동의',
+                        '위치 권한에 동의 하지 않으시면 현재 위치 관련된 기능을 사용하실 수 없습니다.',
+                        [
+                            {
+                                text: '확인',
+                            },
 
+                            {
+                                text: '설정하러 가기',
+                                onPress: () => this._linkAppSettings()
+                            },
+                        ],
+                    )
                 }
                 else { // undetermined
-
                 }
-
             }
-
-            // this.setState({ locationPermission: response })
         })
     }
 
@@ -214,6 +226,16 @@ export default class BigShuttleMap extends Component {
     //         ],
     //     )
     // }
+
+    _linkAppSettings = () => {
+        Linking.canOpenURL('app-settings:').then(supported => {
+            if (!supported) {
+                console.log('Can\'t handle settings url');
+            } else {
+                return Linking.openURL('app-settings:');
+            }
+        }).catch(err => console.error('An error occurred', err));
+    }
 
     _moveSelectedLocation = () => {
         this._mapView.animateToRegion(this.state.selectedRegion, 1000)

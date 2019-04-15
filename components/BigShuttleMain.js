@@ -212,22 +212,13 @@ export default class BigShuttleMain extends Component {
 
     _clickMethod = (data, selectedKey) => {
         var station = shuttleStationDatas[selectedKey].stations;
-        Alert.alert(
-            '상세 이름',
-            data.name,
-            [
-                { text: '취소', onPress: () => console.log('Cancel Pressed!') },
-                {
-                    text: '지도로 가기', onPress: () => this.props.navigation.navigate('BigShuttleMapBase',
+
+        this.props.navigation.navigate('BigShuttleMapBase',
                         {
                             data: data,
                             station: station,
                             selectedKey : selectedKey
                         })
-                }
-            ],
-            { cancelable: false }
-        )
     }
 
 
