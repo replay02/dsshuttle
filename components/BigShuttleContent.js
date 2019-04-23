@@ -12,6 +12,7 @@ export default class BigShuttleContent extends Component {
         super(props);
 
         this.state = {
+
         }
     }
 

@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { Easing, StyleSheet, Animated, View, Dimensions, Image } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator, createAppContainer,createSwitchNavigator } from 'react-navigation';
 
 import BigShuttleMapBase from './components/BigShuttleMapBase';
 
 import ShuttleTab from './components/ShuttleTab';
 import ShuttleMain from './components/ShuttleMain';
 import BigShuttleMain from './components/BigShuttleMain';
+import UserMain from './components/UserMain';
+import UserRegister from './components/UserRegister';
+import UserResetPwd from './components/UserResetPwd';
+
 import DriverInfo from './components/DriverInfo';//dy
+
 
 import SmallShuttleMain from './components/SmallShuttleMain';
 
@@ -39,17 +44,59 @@ const mainStack = createStackNavigator(
     },
   });
 
+const userStack = createStackNavigator(
+  {
+    UserMain: UserMain,
+    UserRegister: UserRegister,
+    UserResetPwd : UserResetPwd
+  }, {
+    initialRouteName: 'UserMain',
+    /* 네비게이션 헤더 옵션 */
+    defaultNavigationOptions: {
+      headerStyle: {
+        display: "none",
+        backgroundColor: '#4baec5',
+      },
+      // headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        color: '#fff'
+      },
+    },
+  });
+
+  const RootStack = createSwitchNavigator(
+    {
+      Auth: userStack,
+      App: mainStack
+    },
+    {
+      initialRouteName: 'Auth',
+      // defaultNavigationOptions: {
+      //   headerStyle: {
+      //     display: "none",
+      //     backgroundColor: '#4baec5',
+      //   },
+      //   // headerTintColor: '#fff',
+      //   headerTitleStyle: {
+      //     fontWeight: 'bold',
+      //     color: '#fff'
+      //   },
+      // },
+    }
+  );
+
 // const store = createStore(reducers);
 
 
-const AppContainer = createAppContainer(mainStack)
-
+// const AppContainer = createAppContainer(mainStack)
+// const UserContainer = createAppContainer(userStack)
+const Root = createAppContainer(RootStack)
 
 
 const value = width - 50;
+
 export default class App extends React.Component {
-
-
 
   constructor(props) {
     super(props);
@@ -57,7 +104,7 @@ export default class App extends React.Component {
 
     this.translateX = this.animatedValue.interpolate({
       inputRange: [0, 0.3, 0.9, 0.95, 1],
-      outputRange: [value, 0, 0,-10, 0],
+      outputRange: [value, 0, 0, -10, 0],
 
     });
 
@@ -70,7 +117,8 @@ export default class App extends React.Component {
   state = {
     animating: false,
     align: 'center',
-    alignsecond: false,
+    alignsecond: false,   // 앱 시작 인트로 애니메이션 끝났는지 여부
+    isLogined: false  // 로그인 토큰을 가지고 있는지 여부
   };
 
   componentDidMount() {
@@ -100,6 +148,11 @@ export default class App extends React.Component {
     );
   }
 
+  _loginCompleteCallback = () => {
+    this.setState({
+      isLogined : true
+    })
+  }
 
   render() {
     // let truckStyle = {
@@ -128,9 +181,9 @@ export default class App extends React.Component {
           backgroundColor: '#4baec5'
         }}>
 
+        {/* 인트로 애니메이션 재생 */}
         {!this.state.alignsecond ?
           <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'column', alignItems: 'center' }}>
-
             <View style={
               {
                 alignSelf: 'stretch',
@@ -179,11 +232,17 @@ export default class App extends React.Component {
             />
           </View>
           :
-          (
-            // <Provider store={store}>
-            <AppContainer />
-            // </Provider>
-          )}
+          // this.state.isLogined ? /* 로그인 여부 체크 */
+          //   (
+          //     // <Provider store={store}>
+          //     <AppContainer />
+          //     // </Provider>
+          //   )
+          //   :
+          //   <UserContainer></UserContainer>
+            
+          <Root/>
+            }
       </View>
     );
   }

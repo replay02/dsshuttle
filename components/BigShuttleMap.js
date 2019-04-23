@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, YellowBox, Alert, Platform, TouchableOpacity,Linking } from 'react-native';
+import { StyleSheet, View, YellowBox, Alert, Platform, TouchableOpacity, Linking, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
 import Permissions from 'react-native-permissions'
 import AndroidOpenSettings from 'react-native-android-open-settings'
 import DefaultPreference from 'react-native-default-preference';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+// import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
+
 import CardView from 'react-native-cardview';
 
 import routeIncheon from '../datas/RouteDatasIncheon'
@@ -44,7 +46,7 @@ export default class BigShuttleMap extends Component {
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA
             },
-
+            clickMethod: null,
             selectedRegion: {}
         };
     }
@@ -69,6 +71,7 @@ export default class BigShuttleMap extends Component {
             longitudeDelta: LONGITUDE_DELTA
         };
 
+        this.state.clickMethod = nextProps.clickMethod;
         // this.state.region = (region => ({
         //     ...region,
         //     latitude: nextProps.data.lat * 1,
@@ -238,8 +241,25 @@ export default class BigShuttleMap extends Component {
     }
 
     _moveSelectedLocation = () => {
-        this._mapView.animateToRegion(this.state.selectedRegion, 1000)
+
+        const { data, station } = this.state;
+
+        this._mapView.animateToRegion(this.state.selectedRegion, 1000);
+
+
+        this._markers.map(function (item, index, array) {
+            if (station[index].title == data.name) {
+                setTimeout(function () {
+                    item.showCallout();
+                }, 1000);
+            }
+        });
     }
+
+    _calloutClick = (title) => {
+        
+    }
+
 
     _moveToMyLocation = () => {
         // Alert.alert('내위치 선택')
@@ -251,7 +271,7 @@ export default class BigShuttleMap extends Component {
         // map에 warning 뜨는 버그 있음 업데이트 될때까지 유지
         YellowBox.ignoreWarnings(['UIManager.getViewManagerConfig']);
 
-        const { station, routeData, isGetMyLocation } = this.state;
+        const { station, routeData, isGetMyLocation, clickMethod } = this.state;
         return (
             <View style={styles.container}>
                 <MapView
@@ -272,10 +292,26 @@ export default class BigShuttleMap extends Component {
 
                     {station.map((marker, i) => (
                         <MapView.Marker
-                            ref={marker => (this._markers[i] = marker)}
+                            ref={(marker) => { this._markers[i] = marker }}
                             key={i}
                             coordinate={marker.coordinates}
-                            title={marker.title} />
+                            title={marker.title}>
+
+                            {/* <FontAwesomeIcon style={{ justifyContent: 'center',alignSelf:'center', alignItems: 'center' }} name="map-marker" size={35} color="#888">
+                                <Text style={{ justifyContent:'center',alignSelf:'center', alignItems: 'center',  fontWeight:'bold', fontSize:10, color:'white' }}>{i}</Text>
+                            </FontAwesomeIcon> */}
+
+                            <MapView.Callout
+                                tooltip={true}
+                                style={styles.calloutBack}
+                                onPress={() => clickMethod(marker.title)}
+                            >
+                                <Text style={styles.calloutText} >
+                                    {marker.title}
+                                </Text>
+                                
+                            </MapView.Callout>
+                        </MapView.Marker>
                     ))}
                     <MapView.Polyline
                         coordinates={routeData}
@@ -333,7 +369,7 @@ const styles = StyleSheet.create({
     },
 
     calloutBack: {
-        flex: 1,
+        flex: 0.8,
         padding: 10,
         backgroundColor: '#fff',
         borderRadius: 5,
@@ -341,24 +377,6 @@ const styles = StyleSheet.create({
         borderColor: '#eee'
     },
     calloutText: {
-        paddingBottom: 5,
-        color: '#888',
-        textAlign: 'center',
-    },
-
-    calloutText2: {
-        paddingTop: 5,
-        paddingBottom: 5,
-        color: '#888',
-        textAlign: 'center',
-    },
-    calloutTitle: {
-        paddingBottom: 5,
-        color: '#000',
-        textAlign: 'center',
-    },
-
-    calloutText3: {
         color: '#888',
         textAlign: 'center',
     },

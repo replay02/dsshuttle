@@ -5,11 +5,15 @@ import SlidingUpPanel from 'rn-sliding-up-panel'
 import BigShuttleMap from './BigShuttleMap';
 // import Carousel from 'react-native-snap-carousel';
 
-const { height, width } = Dimensions.get('window')
+const { height } = Dimensions.get('window')
 const pannelBottom = height / 3;
 
-
 export default class BigShuttleMapBase extends React.Component {
+
+    _panel;
+    _swipeUpDown;
+    _list;
+    _carousel;
 
     static navigationOptions = function (props) {
         return {
@@ -22,20 +26,9 @@ export default class BigShuttleMapBase extends React.Component {
             headerTitleStyle: {
                 fontWeight: 'bold',
                 color: '#fff'
-            },
-            // headerLeft: (
-            //     <TouchableOpacity
-            //         onPress={() => props.navigation.navigate('TabStack')}
-            //         style={{
-            //             left: Dimensions.get("window").height < 667 ? '8%' : '3%',
-            //             backgroundColor: 'transparent', width: '100%'
-            //         }}>
-            //         <Image style={{ width: 40, height: 40 }} color={'#ffffff'} source={require('../assets/back_icon.png')} />
-            //     </TouchableOpacity>
-            // ),
+            }
         }
     };
-
 
     static defaultProps = {
         draggableRange: {
@@ -47,51 +40,11 @@ export default class BigShuttleMapBase extends React.Component {
     state = {
         data: this.props.navigation.state.params.data,
         station: this.props.navigation.state.params.station,
-        selectedKey: this.props.navigation.state.params.selectedKey
+        selectedKey: this.props.navigation.state.params.selectedKey,
+        title: this.props.navigation.state.params.data.name
     }
 
-    _draggedValue = new Animated.Value(pannelBottom)
-    // _headerAlphaValue = new Animated.Value(pannelBottom)
-    // _bodyAlphaValue = new Animated.Value(pannelBottom)
-
-    _panel;
-    _swipeUpDown;
-    _list;
-    _carousel;
-
-    // componentWillMount() {
-    //     this._animatedValue = new Animated.ValueXY();
-    //     this._value = { x: 0, y: 0 };
-
-    //     this._animatedValue.addListener((value) => this._value = value);
-
-    //     this._panResponder = PanResponder.create({
-    //         onMoveShouldSetResponderCapture: () => true,
-    //         //movement 캡쳐를 허락한다.
-
-    //         onMoveShouldSetPanResponderCapture: () => true,
-    //         //dragging 를 허락한다.
-    //         // 위의 두가지 ShouldSet ~~를 해줘야 PanResponder.panhandler가 드래그와 무브를 캡쳐할 수 있다.
-
-    //         onPanResponderGrant: (e, gestureState) => {
-    //             this._animatedValue.setOffset({ x: this._value.x, y: this._value.y });
-    //             this._animatedValue.setValue({ x: 0, y: 0 });
-    //             console.log('Grant!!!!! ');
-
-    //         },
-    //         // PanResponderGrant 는 제스쳐가 생겨날때(panhandler에 제스쳐가 생겨날때) 한번 불린다.
-
-    //         onPanResponderMove: Animated.event([
-    //             null, { dx: this._animatedValue.x, dy: this._animatedValue.y }
-    //         ]),
-    //         //movig 제스쳐가 발생할때(Panhandler가 움직일때) 불린다. 드래그시 계속적으로 move 를 트래킹한다.
-    //         onPanResponderRelease: () => {
-    //             console.log('Release!!!!! ');
-    //             this._animatedValue.flattenOffset();
-    //         }
-    //         // 제스쳐가 사라질때 발생한다.(Panhandler 에서 제스쳐가 사라질때)
-    //     });
-    // }
+    _draggedValue = new Animated.Value(pannelBottom);
 
 
     componentDidMount() {
@@ -102,10 +55,8 @@ export default class BigShuttleMapBase extends React.Component {
         });
     }
 
-
-    componentWillReceiveProps(nextProps) {
-
-    }
+    // componentWillReceiveProps(nextProps) {
+    // }
 
     _renderItem({ item, index }) {
         return (
@@ -119,7 +70,6 @@ export default class BigShuttleMapBase extends React.Component {
         this._panel.show();
     }
 
-
     _setVisible = (value) => {
         const { top } = this.props.draggableRange
         if (value >= ((top) / 2) + pannelBottom / 2) {
@@ -128,6 +78,12 @@ export default class BigShuttleMapBase extends React.Component {
         else {
             this._panel.hide()
         }
+    }
+
+    _clickMethod = (title) => {
+        this.setState({
+            title: title
+        })
     }
 
     render() {
@@ -153,12 +109,12 @@ export default class BigShuttleMapBase extends React.Component {
             extrapolate: 'clamp'
         })
 
-        const { station, data, selectedKey } = this.state;
+        const { station, data, selectedKey, title } = this.state;
 
         return (
             <SafeAreaView forceInset={{ bottom: 'never' }} style={{ flex: 1, backgroundColor: '#fff' }}
             >
-                <BigShuttleMap selectedKey = {selectedKey} station={station} data={data}></BigShuttleMap>
+                <BigShuttleMap selectedKey={selectedKey} station={station} data={data} clickMethod={this._clickMethod}></BigShuttleMap>
 
                 <SlidingUpPanel
                     allowDragging={true}
@@ -176,41 +132,15 @@ export default class BigShuttleMapBase extends React.Component {
 
                     <Animated.View
                         style={[styles.panel, styles.elevationLow, { transform: [{ scale: draggedValue }] }]}
-                    // {...this._panResponder.panhandlers}
                     >
-
-                        {/* <Animated.View style={[styles.favoriteIcon, { transform }]}>
-                            <TouchableOpacity
-                                style={{ alignItems: 'center', width: 48, height: 48, justifyContent: 'center' }}
-                                delayPressIn={0}
-                                // delayPressOut={100}
-                                onPressIn={this._handleOnPress}>
-                                <Image
-                                    source={require('../assets/drag-handle.png')}
-                                    style={{ width: 50, height: 50, alignSelf: 'center' }}
-                                />
-                            </TouchableOpacity>
-                        </Animated.View> */}
-
                         <Animated.View style={[styles.panelHeader, { opacity: headerValue }]}>
-
-
-                            <Text style={{ color: 'black' }}>작은 컨텐츠를 보여줘</Text>
-
-
+                            <Text style={{ color: 'black' }}>{title}</Text>
                         </Animated.View>
 
                         <Animated.View style={[styles.container, { opacity: bodyValue }]}>
 
                             <Text style={{ color: 'black' }}>큰 컨텐츠를 보여줘</Text>
-                            {/* <Carousel
-                                ref={(c) => { this._carousel = c; }}
-                                data={station}
-                                renderItem={this._renderItem}
-                                sliderWidth={width}
-                                // lockScrollWhileSnapping={true}
-                                itemWidth={width - 100}
-                            /> */}
+
                         </Animated.View>
                     </Animated.View>
                 </SlidingUpPanel>
@@ -218,8 +148,6 @@ export default class BigShuttleMapBase extends React.Component {
         )
     }
 }
-
-
 
 const styles = {
     container: {
