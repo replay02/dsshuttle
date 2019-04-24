@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import ReactNative from 'react-native';
-import { StyleSheet, CheckBox, TouchableHighlight, View, Alert, Text, Dimensions, TextInput } from 'react-native';
+import { StyleSheet, TouchableHighlight, View, Alert, Text, Dimensions, TextInput } from 'react-native';
 // import { RectButton } from 'react-native-gesture-handler';
 import SafeAreaView from "react-native-safe-area-view";
 // import ProgressLoader from 'rn-progress-loader';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as Progress from 'react-native-progress';
 import { sha256 } from '../utils/sha256';  // 패스워드 해시
+import DefaultPreference from 'react-native-default-preference';
+
+import CheckBox from 'react-native-check-box'
+
+import CommonConf from '../datas/CommonConf'
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const urlHost = '192.168.43.66';
+
 
 export default class UserMain extends Component {
 
@@ -35,9 +40,7 @@ export default class UserMain extends Component {
             color: '#fff'
         },
     };
-    componentDidMount() {
 
-    }
 
 
 
@@ -91,8 +94,67 @@ export default class UserMain extends Component {
         return true;
     }
 
+    // _doLoginWithToken(token) {
+    _doLoginWithToken = (token) => {
+        this.setState({
+            isLoadingNow: true
+        })
+
+        var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/loginWithToken';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "login_token": token
+            }),
+        }).then(response => response.json()).catch(error => {
+            Alert.alert(error);
+            this.setState({
+                isLoadingNow: false
+            })
+        }).then(json => {
+            console.log(json);
+
+            if (json.resCode != 200) {
+                Alert.alert(json.resMsg);
+
+                // 로그인 토큰 저장
+                DefaultPreference.set(CommonConf.PREF_KEY_LOGIN_TOKEN, "")
+                    .then(function () {
+                        console.log('login token saved.')
+                    })
+
+                this.setState({
+                    isLoadingNow: false
+                });
+            }
+            else {
+                this.setState({
+                    isLoadingNow: false
+                });
+
+                if (json.login_token === "") {
+
+                }
+                else {
+                    // 로그인 토큰 저장
+                    DefaultPreference.set(CommonConf.PREF_KEY_LOGIN_TOKEN, json.login_token)
+                        .then(function () {
+                            console.log('login token saved.')
+                        })
+                }
+                // Alert.alert(json.login_token);
+                this.props.navigation.navigate('App')
+            }
+        });
+    }
+
     // 로그인 진행
-    _doLogin = (id, pw) => {
+    _doLogin = (id, pw, checked) => {
 
         let isValid = this._checkValidInputValues(id, pw);
 
@@ -101,7 +163,7 @@ export default class UserMain extends Component {
                 isLoadingNow: true
             })
 
-            var url = 'http://' + urlHost + ':8080/ss/api/login';
+            var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/login';
 
             fetch(url, {
                 method: 'POST',
@@ -112,7 +174,7 @@ export default class UserMain extends Component {
                 body: JSON.stringify({
                     "id": id,
                     "pw": sha256(pw),
-                    "auto_login" : checked
+                    "auto_login": checked
                 }),
             }).then(response => response.json()).catch(error => {
                 Alert.alert(error);
@@ -133,9 +195,30 @@ export default class UserMain extends Component {
                         isLoadingNow: false
                     });
 
-                    Alert.alert(json.login_token);
+                    if (json.login_token === "") {
 
-                    this.props.navigation.navigate('App')
+                    }
+                    else {
+
+                        const _this = this;
+
+                        // 로그인 토큰 저장
+                        DefaultPreference.set(CommonConf.PREF_KEY_LOGIN_TOKEN, json.login_token)
+                            .then(function () {
+                                console.log('login token saved.')
+
+                                // 로그인 유지 설정 값 저장
+                                DefaultPreference.set(CommonConf.PREF_KEY_AUTO_LOGIN, checked ? "1" : "0")
+                                    .then(function () {
+                                        console.log('auto login token saved.')
+                                        _this.props.navigation.navigate('App')
+                                    })
+
+                            })
+                    }
+                    // Alert.alert(json.login_token);
+
+                    
                 }
             });
         }
@@ -147,15 +230,48 @@ export default class UserMain extends Component {
         // Add a 'scroll' ref to your ScrollView
         this.scroll.props.scrollToFocusedInput(reactNode)
     }
-    _onCheckedAutoLogin(checked){
 
-        if(!checked) {
+
+    _onCheckedAutoLogin(checked) {
+
+        const _this = this;
+
+        if (!checked) {
             Alert.alert('로그인 유지 시, 개인정보 유출에 유의하세요')
         }
-        this.setState({
+
+        _this.setState({
             checked: !checked
         })
+    }
 
+    componentDidMount() {
+
+        const _this = this;
+
+        DefaultPreference.get(CommonConf.PREF_KEY_AUTO_LOGIN).then(function (isCheck) {
+
+            if (isCheck == "1") { // true,false가 아닌 1,0으로 저장 됨
+
+                _this.setState({
+                    isCheck: true
+                })
+
+                DefaultPreference.get(CommonConf.PREF_KEY_LOGIN_TOKEN).then(function (value) {
+                    if (value === "") {
+                        // 토근은 없으나 자동로그인은 켜져 있는 경우 (로그아웃 한 경우)
+                        DefaultPreference.set(CommonConf.PREF_KEY_AUTO_LOGIN, "0")
+                        .then(function () {
+                            console.log('auto login off saved.')
+                        })
+                    }
+                    else {
+                        // 로그인유지가 켜져 있고 토큰이 있을 때는 토큰을 통한 로그인 시도
+                        _this._doLoginWithToken(value);
+                    }
+                })
+            }
+        })
     }
 
     render() {
@@ -218,12 +334,12 @@ export default class UserMain extends Component {
                         numberOfLines={1}
                         onChangeText={(pw) => this.setState({ pw: pw })}
                     />
-                    <View style={{marginRight:width/6, justifyContent:'flex-end', alignItems:'center', flexDirection: 'row', marginTop: 5 }}>
+                    <View style={{ marginRight: width / 6, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row', marginTop: 5 }}>
                         <CheckBox
-                            value={checked}
-                            onValueChange={()=> this._onCheckedAutoLogin(checked)}
+                            isChecked={checked}
+                            onClick={() => this._onCheckedAutoLogin(checked)}
                         />
-                        <Text style={{fontSize:14, color:'white'}}>로그인 유지</Text>
+                        <Text style={{ fontSize: 14, color: 'white' }}>로그인 유지</Text>
                     </View>
 
                     <View style={{ alignSelf: 'center', marginTop: 15, marginBottom: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -245,7 +361,7 @@ export default class UserMain extends Component {
 
                     <TouchableHighlight
                         style={styles.button}
-                        onPress={() => this._doLogin(id, pw)}
+                        onPress={() => this._doLogin(id, pw, checked)}
                         underlayColor='#ffffff55'>
                         <Text style={styles.buttonText}>로그인</Text>
                     </TouchableHighlight>

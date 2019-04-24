@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Easing, StyleSheet, Animated, View, Dimensions, Image } from 'react-native';
-import { createStackNavigator, createAppContainer,createSwitchNavigator } from 'react-navigation';
+import { Animated, View, Dimensions } from 'react-native';
+import { createStackNavigator, createAppContainer, createSwitchNavigator } from 'react-navigation';
 
 import BigShuttleMapBase from './components/BigShuttleMapBase';
 
@@ -15,6 +15,8 @@ import DriverInfo from './components/DriverInfo';//dy
 
 
 import SmallShuttleMain from './components/SmallShuttleMain';
+import SettingMain from './components/SettingMain';
+import SettingSub from './components/SettingSub';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -26,9 +28,37 @@ const mainStack = createStackNavigator(
     BigShuttleMapBase: BigShuttleMapBase,
     DriverInfo: DriverInfo, //dy
     SmallShuttleMain: SmallShuttleMain,
-    ShuttleTab: ShuttleTab
+    ShuttleTab: ShuttleTab,
+    SettingMain: SettingMain,
+    SettingSub: SettingSub,
   }, {
     initialRouteName: 'Main',
+
+    // 화면전환 애니메이션 
+    transitionConfig: () => ({
+      screenInterpolator: sceneProps => {
+        const { layout, position, scene } = sceneProps;
+        const { index } = scene;
+
+        const translateX = position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [layout.initWidth, 0, 0]
+        });
+        
+        const opacity = position.interpolate({
+          inputRange: [
+            index - 1,
+            index - 0.99,
+            index,
+            index + 0.99,
+            index + 1
+          ],
+          outputRange: [0, 1, 1, 0.3, 0]
+        });
+
+        return { opacity, transform: [{ translateX }] };
+      }
+    }),
 
     /* 네비게이션 헤더 옵션 */
     defaultNavigationOptions: {
@@ -48,7 +78,7 @@ const userStack = createStackNavigator(
   {
     UserMain: UserMain,
     UserRegister: UserRegister,
-    UserResetPwd : UserResetPwd
+    UserResetPwd: UserResetPwd
   }, {
     initialRouteName: 'UserMain',
     /* 네비게이션 헤더 옵션 */
@@ -65,26 +95,26 @@ const userStack = createStackNavigator(
     },
   });
 
-  const RootStack = createSwitchNavigator(
-    {
-      Auth: userStack,
-      App: mainStack
-    },
-    {
-      initialRouteName: 'Auth',
-      // defaultNavigationOptions: {
-      //   headerStyle: {
-      //     display: "none",
-      //     backgroundColor: '#4baec5',
-      //   },
-      //   // headerTintColor: '#fff',
-      //   headerTitleStyle: {
-      //     fontWeight: 'bold',
-      //     color: '#fff'
-      //   },
-      // },
-    }
-  );
+const RootStack = createSwitchNavigator(
+  {
+    Auth: userStack,
+    App: mainStack
+  },
+  {
+    initialRouteName: 'Auth',
+    // defaultNavigationOptions: {
+    //   headerStyle: {
+    //     display: "none",
+    //     backgroundColor: '#4baec5',
+    //   },
+    //   // headerTintColor: '#fff',
+    //   headerTitleStyle: {
+    //     fontWeight: 'bold',
+    //     color: '#fff'
+    //   },
+    // },
+  }
+);
 
 // const store = createStore(reducers);
 
@@ -122,12 +152,6 @@ export default class App extends React.Component {
   };
 
   componentDidMount() {
-    // Animated.transform(this.animatedValue, {
-    //   toValue: 1,
-    //   friction: 4,
-    //   delay: 2500,
-    //   useNativeDriver: true,
-    // }).start();
 
     Animated.timing(this.animatedValue, {
       toValue: 1,
@@ -150,14 +174,11 @@ export default class App extends React.Component {
 
   _loginCompleteCallback = () => {
     this.setState({
-      isLogined : true
+      isLogined: true
     })
   }
 
   render() {
-    // let truckStyle = {
-    //   transform: [{ scale: this.animatedValue }]
-    // };
 
     let scaleText = {
       transform: [{ scale: this.animatedValue }]
@@ -232,17 +253,8 @@ export default class App extends React.Component {
             />
           </View>
           :
-          // this.state.isLogined ? /* 로그인 여부 체크 */
-          //   (
-          //     // <Provider store={store}>
-          //     <AppContainer />
-          //     // </Provider>
-          //   )
-          //   :
-          //   <UserContainer></UserContainer>
-            
-          <Root/>
-            }
+          <Root />
+        }
       </View>
     );
   }

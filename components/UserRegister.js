@@ -7,11 +7,11 @@ import SafeAreaView from "react-native-safe-area-view";
 import * as Progress from 'react-native-progress';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { sha256 } from '../utils/sha256';  // 패스워드 해시
+import CommonConf from '../datas/CommonConf'
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const urlHost = '192.168.43.66';
 
 export default class UserRegister extends Component {
 
@@ -46,7 +46,7 @@ export default class UserRegister extends Component {
         const { id } = this.state;
 
         if (id) {
-            var url = 'http://' + urlHost + ':8080/ss/api/checkUserDupl';
+            var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/checkUserDupl';
             this.setState({
                 isLoadingNow: true
             })
@@ -182,7 +182,7 @@ export default class UserRegister extends Component {
         let isValid = this._checkValidInputValues(id, pw, pw2, email, isNotDuplId);
 
         if (isValid) {
-            var url = 'http://' + urlHost + ':8080/ss/api/regiUser';
+            var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/regiUser';
 
             this.setState({
                 isLoadingNow: true

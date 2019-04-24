@@ -6,11 +6,12 @@ import SafeAreaView from "react-native-safe-area-view";
 
 import * as Progress from 'react-native-progress';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import CommonConf from '../datas/CommonConf'
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const urlHost = '192.168.43.66';
+
 
 export default class UserResetPwd extends Component {
 
@@ -95,7 +96,7 @@ export default class UserResetPwd extends Component {
         let isValid = this._checkValidInputValues(id, email);
 
         if (isValid) {
-            var url = 'http://' + urlHost + ':8080/ss/api/resetPwd';
+            var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/resetPwd';
 
             this.setState({
                 isLoadingNow: true

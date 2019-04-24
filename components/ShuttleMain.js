@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, Easing, TouchableHighlight, Animated, View, Alert, Text, Dimensions, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity, TouchableHighlight, Animated, View, Alert, Text, Dimensions, Image, Platform } from 'react-native';
 // import { RectButton } from 'react-native-gesture-handler';
 import SafeAreaView from "react-native-safe-area-view";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Weather from './Weather'
 // const width = Dimensions.get('window').width;
@@ -12,6 +13,7 @@ const API_KEY_GEO = "AIzaSyBRZawBb4awd9BNC4EmlSYRRGY5bACLt5E";
 
 const menuTitles = ['사송', '셔틀', '게시판', '기사님 정보', '기타']
 const height = Dimensions.get('window').height;
+const safearewHeaderHeight = Platform.OS === "android" ? 0 : 44;
 
 export default class ShuttleMain extends Component {
 
@@ -23,7 +25,9 @@ export default class ShuttleMain extends Component {
         temp: null,
         myweather: null,
         addr: '',
-        icon: null
+        icon: null,
+        modalVisible: true,
+        
     };
 
     static navigationOptions = {
@@ -52,15 +56,6 @@ export default class ShuttleMain extends Component {
                 });
             });
     }
-
-    // _bootAnimation = () => {
-
-    //     Animated.timing(this.state.animatedStartValue, {
-    //         toValue: 1,
-    //         duration: 3000,
-    //         // easing: Easing.ease
-    //     }).start();
-    // }
 
     // 사송
     _goSmallShuttle = () => {
@@ -204,6 +199,13 @@ export default class ShuttleMain extends Component {
                     </TouchableHighlight>
 
                 </View>
+
+                <TouchableOpacity
+                    style={styles.settingBtn}
+                    onPress={() => this.props.navigation.navigate('SettingMain')}
+                    activeOpacity={0.7}>
+                    <Icon style={{ justifyContent: 'center', alignItems: 'center' }} name="settings" size={30} color="#fff" />
+                </TouchableOpacity>
             </SafeAreaView>
         );
     }
@@ -216,6 +218,15 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 50,
         marginTop: 10
+    },
+
+    settingBtn: {
+        height: 45,
+        position: 'absolute',
+        width: 45,
+        alignItems: 'flex-start',
+        alignSelf: 'flex-end',
+        marginTop: 15 + safearewHeaderHeight
     },
 
     container: {
