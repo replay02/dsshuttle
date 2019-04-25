@@ -60,12 +60,7 @@ export default class UserRegister extends Component {
                 body: JSON.stringify({
                     "id": id
                 }),
-            }).then(response => response.json()).catch(error => {
-                Alert.alert(error);
-                this.setState({
-                    isLoadingNow: false
-                })
-            }).then(json => {
+            }).then(response => response.json()).then(json => {
                 console.log(json);
 
                 this.setState({
@@ -90,6 +85,11 @@ export default class UserRegister extends Component {
                 else {
                     Alert.alert(json.resMsg);
                 }
+            }).catch(error => {
+                Alert.alert("서버 통신 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
+                this.setState({
+                    isLoadingNow: false
+                })
             });
         }
         else {
@@ -196,15 +196,10 @@ export default class UserRegister extends Component {
                 },
                 body: JSON.stringify({
                     "id": id,
-                    "pw": sha256(pw),
+                    "pw": sha256(id+pw),
                     "email": email
                 }),
-            }).then(response => response.json()).catch(error => {
-                Alert.alert(error);
-                this.setState({
-                    isLoadingNow: false
-                })
-            }).then(json => {
+            }).then(response => response.json()).then(json => {
                 console.log(json);
 
                 this.setState({
@@ -228,6 +223,11 @@ export default class UserRegister extends Component {
                 else {
                     Alert.alert(json.resMsg);
                 }
+            }).catch(error => {
+                Alert.alert("서버 통신 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
+                this.setState({
+                    isLoadingNow: false
+                })
             });
         }
 
@@ -237,7 +237,6 @@ export default class UserRegister extends Component {
     scroll;
 
     _scrollToInput(reactNode) {
-        // Add a 'scroll' ref to your ScrollView
         this.scroll.props.scrollToFocusedInput(reactNode)
     }
 
@@ -255,15 +254,19 @@ export default class UserRegister extends Component {
                     contentContainerStyle={{
                         // flexGrow: 1,
                         justifyContent: 'center',
-                        marginTop: 100,
-                        marginBottom: 50
+                        // marginTop: 100,
+                        // marginBottom: 50
                     }}
                     innerRef={ref => {
                         this.scroll = ref
                     }}
                     keyboardShouldPersistTaps='handled'
+                    // scrollEnabled={true} 
+                    // enableAutomaticScroll={true}
+                    enableOnAndroid={true}
+                    keyboardDismissMode='interactive'
                     style={{ backgroundColor: '#4baec5' }}>
-                    <View style={{ alignSelf: 'center', flexDirection: 'row', width: width / 3 * 2, height: 50, }}>
+                    <View style={{ alignSelf: 'center', flexDirection: 'row', width: width / 3 * 2, height: 50, marginTop: 56}}>
                         <TextInput
                             style={{
                                 width: width / 3 * 2 - 80, height: 50,
@@ -352,7 +355,6 @@ export default class UserRegister extends Component {
                             borderBottomWidth: 0.5
                         }}
                         onFocus={(event) => {
-                            // `bind` the function if you're using ES6 classes
                             this._scrollToInput(ReactNative.findNodeHandle(event.target))
                         }}
                         placeholder="이메일주소 입력(사외망 주소)"

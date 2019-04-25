@@ -69,12 +69,7 @@ export default class SettingMain extends React.Component {
           body: JSON.stringify({
             "login_token": value
           }),
-        }).then(response => response.json()).catch(error => {
-          Alert.alert(error);
-          _this.setState({
-            isLoadingNow: false
-          })
-        }).then(json => {
+        }).then(response => response.json()).then(json => {
           console.log(json);
           if (json.resCode != 200) {
             Alert.alert(json.resMsg);
@@ -104,6 +99,11 @@ export default class SettingMain extends React.Component {
                 )
               })
           }
+        }).catch(error => {
+          Alert.alert("서버 통신 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
+          _this.setState({
+            isLoadingNow: false
+          })
         });
       }
     })
@@ -182,7 +182,11 @@ export default class SettingMain extends React.Component {
           { cancelable: true }
         )
         break;
-      case 2:  // 회원 탈퇴
+      case 2:  // 비밀번호 변경
+
+        this.props.navigation.navigate('UserChangePwd')
+        break;
+      case 3:  // 회원 탈퇴
 
         Alert.alert(
           '회원 탈퇴',
@@ -231,9 +235,17 @@ export default class SettingMain extends React.Component {
               onPress={() => this._selectMenu(2)}
               activeOpacity={0.7}>
               <Icon style={{ marginLeft: 15 }} name="account-outline" size={30} color="#000" />
-              <Text style={styles.mainText}>회원탈퇴</Text>
+              <Text style={styles.mainText}>비밀번호 변경</Text>
             </TouchableOpacity>
             <View style={{ height: 1, alignSelf: 'stretch', backgroundColor: '#e5e5e5' }}></View>
+
+            <TouchableOpacity
+              style={styles.row}
+              onPress={() => this._selectMenu(3)}
+              activeOpacity={0.7}>
+              <Icon style={{ marginLeft: 15 }} name="account-outline" size={30} color="#000" />
+              <Text style={styles.mainText}>회원탈퇴</Text>
+            </TouchableOpacity>
 
           </CardView>
 
@@ -245,7 +257,7 @@ export default class SettingMain extends React.Component {
             cornerRadius={0}>
             <TouchableOpacity
               style={styles.row}
-              onPress={() => this._selectMenu(3)}
+              onPress={() => this._selectMenu(4)}
               activeOpacity={0.7}>
               <Icon style={{ marginLeft: 15 }} name="account-outline" size={30} color="#000" />
               <Text style={styles.mainText}>오픈소스라이선스</Text>
@@ -253,7 +265,7 @@ export default class SettingMain extends React.Component {
             <View style={{ height: 1, alignSelf: 'stretch', backgroundColor: '#e5e5e5' }}></View>
             <TouchableOpacity
               style={styles.row}
-              onPress={() => this._selectMenu(4)}
+              onPress={() => this._selectMenu(5)}
               activeOpacity={0.7}>
               <Icon style={{ marginLeft: 15 }} name="account-outline" size={30} color="#000" />
               <Text style={styles.mainText}>앱버전</Text>

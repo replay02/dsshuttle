@@ -7,24 +7,28 @@ import SafeAreaView from "react-native-safe-area-view";
 import * as Progress from 'react-native-progress';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import CommonConf from '../datas/CommonConf'
+import DefaultPreference from 'react-native-default-preference';
+import { sha256 } from '../utils/sha256';  // 패스워드 해시
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 
-
-export default class UserResetPwd extends Component {
+export default class UserChangePwd extends Component {
 
     state = {
         navigation: null,
         id: '',
-        email: '',
+        originPw: '',
+        pw: '',
+        pw2: '',
         isLoadingNow: false,
+        loginToken: ''
     };
 
     static navigationOptions = {
         // header: null,
-        title: "비밀번호 재설정",
+        title: "비밀번호 변경",
         headerStyle: {
             backgroundColor: '#4baec5',
         },
@@ -35,21 +39,101 @@ export default class UserResetPwd extends Component {
         },
     };
     componentDidMount() {
+        const _this = this;
+        DefaultPreference.get(CommonConf.PREF_KEY_LOGIN_TOKEN).then(function (value) {
+            if (value === "") {
 
+            }
+            else {
+                _this.setState({
+                    loginToken: value
+                })
 
+                _this._getMyInfo();
+            }
+        })
+    }
+
+    // 토큰만 가지고 있기 때문에 id(사번) 정보를 받아오기 위함
+    _getMyInfo = () => {
+
+        const { loginToken } = this.state;
+
+        var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/myInfo';
+
+        this.setState({
+            isLoadingNow: true
+        })
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "login_token": loginToken
+            }),
+        }).then(response => response.json()).catch(error => {
+            this.setState({
+                isLoadingNow: false
+            })
+
+            Alert.alert(
+                '통신 오류',
+                err,
+                [
+                    {
+                        text: '확인',
+                        onPress: () => this.props.navigation.goBack(),
+                    },
+                ],
+                { cancelable: false }
+            )
+
+        }).then(json => {
+            console.log(json);
+
+            // Alert.alert(JSON.stringify());
+
+            if (json.resCode == 200) {  // 정상
+
+                this.setState({
+                    isLoadingNow: false,
+                    id: json.resData.id
+                })
+            }
+            else {
+                this.setState({
+                    isLoadingNow: false
+                })
+                Alert.alert(
+                    '통신 오류',
+                    json.resMsg,
+                    [
+                        {
+                            text: '확인',
+                            onPress: () => this.props.navigation.goBack(),
+                        },
+                    ],
+                    { cancelable: false }
+                )
+            }
+        });
     }
 
     _showInputTextErrorMsg = (type) => {
         let msg = '';
         switch (type) {
-            case 'id':
-                msg = '사번을 확인해 주세요'
+            case 'originPw':
+                msg = '기존 비밀번호를 확인해 주세요'
                 break;
-            case 'email':
-                msg = '이메일을 확인해 주세요'
+            case 'pw':
+            case 'pw2':
+                msg = '새 비밀번호를 확인해 주세요'
                 break;
-            case 'invalidEmail':
-                msg = '이메일 주소가 유효하지 않습니다. 다시 입력해주세요'
+            case 'diffPw':
+                msg = '새 비밀번호 입력값이 다릅니다'
                 break;
             default:
                 break;
@@ -65,43 +149,44 @@ export default class UserResetPwd extends Component {
         )
     }
 
-    _checkValidInputValues = (id, email) => {
-        let regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-        if (id && email) {
-
-            if (email.match(regExp) == null) {  //이메일 정규식 체크 
-                this._showInputTextErrorMsg('invalidEmail');
+    _checkValidInputValues = (originPw, pw, pw2) => {
+        if (originPw && pw && pw2) {
+            if (pw != pw2) {  // 패스워드 같은지 체크
+                this._showInputTextErrorMsg('diffPw');
                 return false;
             }
-
         }
         else {  // 비어 있는 입력값 체크
-            if (!id) {
-                this._showInputTextErrorMsg('id');
+            if (!originPw) {
+                this._showInputTextErrorMsg('originPw');
                 return false;
             }
-            if (!email) {
-                this._showInputTextErrorMsg('email');
+            if (!pw) {
+                this._showInputTextErrorMsg('pw');
+                return false;
+            }
+            if (!pw2) {
+                this._showInputTextErrorMsg('pw2');
                 return false;
             }
         }
         return true;
     }
 
-    // 비밀번호 재설정 진행
-    _doResetPwd = () => {
+    // 비밀번호 변경 진행
+    _doChangePwd = () => {
 
-        const { id, email } = this.state;
+        const { loginToken, originPw, pw, pw2 } = this.state;
 
-        let isValid = this._checkValidInputValues(id, email);
+        let isValid = this._checkValidInputValues(originPw, pw, pw2);
 
-        if (isValid) {
-            var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/resetPwd';
+        if(isValid) {
+            var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/changePwd';
 
             this.setState({
                 isLoadingNow: true
             })
-
+    
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -109,21 +194,22 @@ export default class UserResetPwd extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    "id": id,
-                    "email": email
+                    "login_token": loginToken,
+                    "originPw": sha256(this.state.id + originPw),
+                    "pw": sha256(this.state.id + pw)
                 }),
             }).then(response => response.json()).then(json => {
                 console.log(json);
-
+    
                 this.setState({
                     isLoadingNow: false
                 })
-
+    
                 if (json.resCode == 200) {  // 정상
-
+    
                     Alert.alert(
-                        '비밀번호 재설정',
-                        '비밀번호 재설정이 완료되었습니다. 이메일 주소로 전달 된 임시 비밀번호로 로그인 해 주세요',
+                        '비밀번호 변경',
+                        '비밀번호 변경이 완료되었습니다.',
                         [
                             {
                                 text: '확인',
@@ -143,8 +229,6 @@ export default class UserResetPwd extends Component {
                 })
             });
         }
-
-
     }
 
     scroll;
@@ -175,6 +259,7 @@ export default class UserResetPwd extends Component {
                     keyboardShouldPersistTaps='handled'
                     style={{ backgroundColor: '#4baec5' }}>
 
+
                     <TextInput
                         style={{
                             width: width / 3 * 2, height: 50,
@@ -186,14 +271,34 @@ export default class UserResetPwd extends Component {
                         onFocus={(event) => {
                             this._scrollToInput(ReactNative.findNodeHandle(event.target))
                         }}
-                        placeholder="8자리 사번"
+                        placeholder="기존 비밀번호를 입력하세요"
                         placeholderTextColor={'#c5c5c5'}
                         autoCapitalize='none'
-                        secureTextEntry={false}
+                        secureTextEntry={true}
                         ref={(input) => { this.secondTextInput = input; }}
-                        onSubmitEditing={() => { this.thirdTextInput.focus(); }}
                         numberOfLines={1}
-                        onChangeText={(id) => this.setState({ id: id })}
+                        onChangeText={(originPw) => this.setState({ originPw: originPw })}
+                    />
+
+
+                    <TextInput
+                        style={{
+                            width: width / 3 * 2, height: 50,
+                            alignSelf: 'center',
+                            borderBottomColor: '#fff',
+                            color: '#fff',
+                            borderBottomWidth: 0.5
+                        }}
+                        onFocus={(event) => {
+                            this._scrollToInput(ReactNative.findNodeHandle(event.target))
+                        }}
+                        placeholder="새 비밀번호를 입력하세요"
+                        placeholderTextColor={'#c5c5c5'}
+                        autoCapitalize='none'
+                        secureTextEntry={true}
+                        ref={(input) => { this.secondTextInput = input; }}
+                        numberOfLines={1}
+                        onChangeText={(pw) => this.setState({ pw: pw })}
                     />
 
                     <TextInput
@@ -205,23 +310,22 @@ export default class UserResetPwd extends Component {
                             borderBottomWidth: 0.5
                         }}
                         onFocus={(event) => {
-                            // `bind` the function if you're using ES6 classes
                             this._scrollToInput(ReactNative.findNodeHandle(event.target))
                         }}
-                        placeholder="가입된 이메일주소 입력"
+                        placeholder="새 비밀번호를 한번 더 입력하세요"
                         placeholderTextColor={'#c5c5c5'}
                         autoCapitalize='none'
-                        ref={(input) => { this.fourthTextInput = input; }}
-                        secureTextEntry={false}
+                        secureTextEntry={true}
+                        ref={(input) => { this.secondTextInput = input; }}
                         numberOfLines={1}
-                        onChangeText={(email) => this.setState({ email: email })}
+                        onChangeText={(pw2) => this.setState({ pw2: pw2 })}
                     />
 
                     <TouchableHighlight
                         style={styles.button}
-                        onPress={() => this._doResetPwd()}
+                        onPress={() => this._doChangePwd()}
                         underlayColor='#ffffff55'>
-                        <Text style={styles.buttonText}>비밀번호 재설정</Text>
+                        <Text style={styles.buttonText}>비밀번호 변경</Text>
                     </TouchableHighlight>
 
                 </KeyboardAwareScrollView>

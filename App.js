@@ -17,6 +17,9 @@ import DriverInfo from './components/DriverInfo';//dy
 import SmallShuttleMain from './components/SmallShuttleMain';
 import SettingMain from './components/SettingMain';
 import SettingSub from './components/SettingSub';
+import UserChangePwd from './components/UserChangePwd';
+
+
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -31,6 +34,7 @@ const mainStack = createStackNavigator(
     ShuttleTab: ShuttleTab,
     SettingMain: SettingMain,
     SettingSub: SettingSub,
+    UserChangePwd:UserChangePwd
   }, {
     initialRouteName: 'Main',
 

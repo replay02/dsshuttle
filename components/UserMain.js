@@ -94,7 +94,6 @@ export default class UserMain extends Component {
         return true;
     }
 
-    // _doLoginWithToken(token) {
     _doLoginWithToken = (token) => {
         this.setState({
             isLoadingNow: true
@@ -111,12 +110,7 @@ export default class UserMain extends Component {
             body: JSON.stringify({
                 "login_token": token
             }),
-        }).then(response => response.json()).catch(error => {
-            Alert.alert(error);
-            this.setState({
-                isLoadingNow: false
-            })
-        }).then(json => {
+        }).then(response => response.json()).then(json => {
             console.log(json);
 
             if (json.resCode != 200) {
@@ -150,6 +144,11 @@ export default class UserMain extends Component {
                 // Alert.alert(json.login_token);
                 this.props.navigation.navigate('App')
             }
+        }).catch(error => {
+            Alert.alert("서버 통신 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
+            this.setState({
+                isLoadingNow: false
+            })
         });
     }
 
@@ -173,15 +172,10 @@ export default class UserMain extends Component {
                 },
                 body: JSON.stringify({
                     "id": id,
-                    "pw": sha256(pw),
+                    "pw": sha256(id+pw),
                     "auto_login": checked
                 }),
-            }).then(response => response.json()).catch(error => {
-                Alert.alert(error);
-                this.setState({
-                    isLoadingNow: false
-                })
-            }).then(json => {
+            }).then(response => response.json()).then(json => {
                 console.log(json);
 
                 if (json.resCode != 200) {
@@ -220,6 +214,11 @@ export default class UserMain extends Component {
 
                     
                 }
+            }).catch(error => {
+                Alert.alert("서버 통신 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
+                this.setState({
+                    isLoadingNow: false
+                })
             });
         }
     }

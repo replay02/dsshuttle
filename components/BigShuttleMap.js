@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import CardView from 'react-native-cardview';
 
+
 import routeIncheon from '../datas/RouteDatasIncheon'
 import routeJamsil from '../datas/RouteDatasJamsil'
 import routeMokdong from '../datas/RouteDatasMokdong'
@@ -47,7 +48,8 @@ export default class BigShuttleMap extends Component {
                 longitudeDelta: LONGITUDE_DELTA
             },
             clickMethod: null,
-            selectedRegion: {}
+            selectedRegion: {},
+            clearId : null
         };
     }
 
@@ -135,6 +137,9 @@ export default class BigShuttleMap extends Component {
 
     // yhkim 확인 필요
     componentWillUnmount() {
+
+        clearTimeout(this.state.clearId) ;
+
         // if(WATCH_ID != 0) {
         //     navigator.geolocation.clearWatch(WATCH_ID);
         // }
@@ -243,15 +248,15 @@ export default class BigShuttleMap extends Component {
     _moveSelectedLocation = () => {
 
         const { data, station } = this.state;
-
+        const _this = this;
         this._mapView.animateToRegion(this.state.selectedRegion, 1000);
-
 
         this._markers.map(function (item, index, array) {
             if (station[index].title == data.name) {
-                setTimeout(function () {
+                var clearId = setTimeout(function () {
                     item.showCallout();
                 }, 1000);
+                _this.setState({ clearId: clearId});
             }
         });
     }
