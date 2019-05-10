@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-svg')
     implementation project(':react-native-calendar-events')
     implementation project(':react-native-default-preference')
     implementation project(':react-native-android-open-settings')

@@ -3,6 +3,7 @@ package com.dsshuttle;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.SvgPackage;
 import com.calendarevents.CalendarEventsPackage;
 import com.kevinresol.react_native_default_preference.RNDefaultPreferencePackage;
 import com.levelasquez.androidopensettings.AndroidOpenSettingsPackage;
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SvgPackage(),
             new CalendarEventsPackage(),
             new RNDefaultPreferencePackage(),
             new AndroidOpenSettingsPackage(),

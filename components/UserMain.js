@@ -120,6 +120,7 @@ export default class UserMain extends Component {
                 DefaultPreference.set(CommonConf.PREF_KEY_LOGIN_TOKEN, "")
                     .then(function () {
                         console.log('login token saved.')
+                        
                     })
 
                 this.setState({

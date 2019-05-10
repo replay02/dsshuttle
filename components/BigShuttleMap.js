@@ -104,6 +104,7 @@ export default class BigShuttleMap extends Component {
     // }
 
     componentDidMount() {
+        
         // this._alertForPhotosPermission();
         Permissions.check('location').then(response => {
             // Returns once the user has chosen to 'allow' or to 'not allow' access      
@@ -117,6 +118,7 @@ export default class BigShuttleMap extends Component {
 
                 // 현재 위치 가져오기
                 WATCH_ID = navigator.geolocation.watchPosition((position) => {
+                    
                     let region = {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
@@ -141,7 +143,7 @@ export default class BigShuttleMap extends Component {
         clearTimeout(this.state.clearId) ;
 
         // if(WATCH_ID != 0) {
-        //     navigator.geolocation.clearWatch(WATCH_ID);
+            navigator.geolocation.clearWatch(WATCH_ID);
         // }
     }
 
