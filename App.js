@@ -2,27 +2,29 @@ import React, { Component } from 'react';
 import { Animated, View, Dimensions } from 'react-native';
 import { createStackNavigator, createAppContainer, createSwitchNavigator } from 'react-navigation';
 
-import BigShuttleMapBase from './components/BigShuttleMapBase';
+import BigShuttleMapBase from './components/BigShuttle/BigShuttleMapBase';
+import ShuttleTab from './components/Main/ShuttleTab';
+import ShuttleMain from './components/Main/ShuttleMain';
+import BigShuttleMain from './components/BigShuttle/BigShuttleMain';
+import UserMain from './components/Users/UserMain';
+import UserRegister from './components/Users/UserRegister';
+import UserResetPwd from './components/Users/UserResetPwd';
 
-import ShuttleTab from './components/ShuttleTab';
-import ShuttleMain from './components/ShuttleMain';
-import BigShuttleMain from './components/BigShuttleMain';
-import UserMain from './components/UserMain';
-import UserRegister from './components/UserRegister';
-import UserResetPwd from './components/UserResetPwd';
+import DriverInfo from './components/DriversInfo/DriverInfo';//dy
+import ItemReg from './components/SendStuff/ItemReg';//dy
+import ItemList from './components/SendStuff/ItemList';//dy
+import ItemDtlList from './components/SendStuff/ItemDtlList';//dy
+import NoticeBoard from './components/NoticeBoard/NoticeBoard'; // ny: 게시판
 
-import DriverInfo from './components/DriverInfo';//dy
-
-
-import SmallShuttleMain from './components/SmallShuttleMain';
-import SettingMain from './components/SettingMain';
-import SettingSub from './components/SettingSub';
-import UserChangePwd from './components/UserChangePwd';
-
-
+import SmallShuttleMain from './components/SmallShuttle/SmallShuttleMain';
+import SettingMain from './components/Setting/SettingMain';
+import SettingSub from './components/Setting/SettingSub';
+import UserChangePwd from './components/Users/UserChangePwd';
+import firebase  from './components/Push/Firebase';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
+
 
 const mainStack = createStackNavigator(
   {
@@ -30,11 +32,15 @@ const mainStack = createStackNavigator(
     BigShuttleMain: BigShuttleMain,
     BigShuttleMapBase: BigShuttleMapBase,
     DriverInfo: DriverInfo, //dy
+    ItemReg: ItemReg,//dy
     SmallShuttleMain: SmallShuttleMain,
     ShuttleTab: ShuttleTab,
     SettingMain: SettingMain,
     SettingSub: SettingSub,
-    UserChangePwd:UserChangePwd
+    UserChangePwd:UserChangePwd,
+    NoticeBoard : NoticeBoard, // ny:게시판
+    ItemList: ItemList,//dy
+    ItemDtlList : ItemDtlList//dy
   }, {
     initialRouteName: 'Main',
 
@@ -121,8 +127,6 @@ const RootStack = createSwitchNavigator(
 );
 
 // const store = createStore(reducers);
-
-
 // const AppContainer = createAppContainer(mainStack)
 // const UserContainer = createAppContainer(userStack)
 const Root = createAppContainer(RootStack)
@@ -155,8 +159,25 @@ export default class App extends React.Component {
     isLogined: false  // 로그인 토큰을 가지고 있는지 여부
   };
 
-  componentDidMount() {
 
+  async _listenForNotifications(){
+    // onNotificationDisplayed - ios only
+
+    this.notificationListener = firebase.notifications().onNotification((notification) => {
+      console.log('onNotification', notification);
+    });
+
+    this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+        console.log('onNotificationOpened', notificationOpen);
+    });
+
+    const notificationOpen = await firebase.notifications().getInitialNotification();
+    if (notificationOpen) {
+        console.log('getInitialNotification', notificationOpen);
+    }
+  }
+  
+  componentDidMount() {
     Animated.timing(this.animatedValue, {
       toValue: 1,
       // delay: 200,
@@ -183,7 +204,6 @@ export default class App extends React.Component {
   }
 
   render() {
-
     let scaleText = {
       transform: [{ scale: this.animatedValue }]
     };
