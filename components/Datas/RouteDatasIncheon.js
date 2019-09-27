@@ -1420,7 +1420,7 @@ export default RouteDatasIncheon = [{
 
 {
     longitude: 126.7492243,
-    latitude: 37.4808074
+    latitude: 37.4808874
 },
 
 {

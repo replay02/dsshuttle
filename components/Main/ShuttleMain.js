@@ -108,7 +108,7 @@ export default class ShuttleMain extends Component {
     DefaultPreference.get(CommonConf.PREF_KEY_LOGIN_TOKEN).then(function (login_token) {
 
       if (login_token) { 
-        var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/regiPushToken';
+        var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/regiPushToken';
         fetch(url, {
             method: 'POST',
             headers: {

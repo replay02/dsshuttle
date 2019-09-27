@@ -50,7 +50,7 @@ export default class UserRegister extends Component {
         const { id } = this.state;
 
         if (id) {
-            var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/checkUserDupl';
+            var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/checkUserDupl';
             this.setState({
                 isLoadingNow: true
             })
@@ -200,7 +200,7 @@ export default class UserRegister extends Component {
         let isValid = this._checkValidInputValues(id, pw, pw2, email, phone,name, isNotDuplId);
 
         if (isValid) {
-            var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/regiUser';
+            var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/regiUser';
 
             this.setState({
                 isLoadingNow: true

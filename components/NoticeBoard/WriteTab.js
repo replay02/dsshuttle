@@ -29,7 +29,7 @@ export default class WriteTab extends Component {
 
         const { writer, password, content } = this.state;
 
-        var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/boardcontents';
+        var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/boardcontents';
         console.log("kny_posturl", url);
 
         

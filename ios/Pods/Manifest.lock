@@ -1,0 +1,176 @@
+PODS:
+  - Firebase/Analytics (6.9.0):
+    - Firebase/Core
+  - Firebase/Core (6.9.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics (= 6.1.2)
+  - Firebase/CoreOnly (6.9.0):
+    - FirebaseCore (= 6.3.0)
+  - Firebase/Messaging (6.9.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 4.1.4)
+  - FirebaseAnalytics (6.1.2):
+    - FirebaseCore (~> 6.3)
+    - FirebaseInstanceID (~> 4.2)
+    - GoogleAppMeasurement (= 6.1.2)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
+    - GoogleUtilities/MethodSwizzler (~> 6.0)
+    - GoogleUtilities/Network (~> 6.0)
+    - "GoogleUtilities/NSData+zlib (~> 6.0)"
+    - nanopb (~> 0.3)
+  - FirebaseAnalyticsInterop (1.4.0)
+  - FirebaseCore (6.3.0):
+    - FirebaseCoreDiagnostics (~> 1.0)
+    - FirebaseCoreDiagnosticsInterop (~> 1.0)
+    - GoogleUtilities/Environment (~> 6.2)
+    - GoogleUtilities/Logger (~> 6.2)
+  - FirebaseCoreDiagnostics (1.1.0):
+    - FirebaseCoreDiagnosticsInterop (~> 1.0)
+    - GoogleDataTransportCCTSupport (~> 1.0)
+    - GoogleUtilities/Environment (~> 6.2)
+    - GoogleUtilities/Logger (~> 6.2)
+  - FirebaseCoreDiagnosticsInterop (1.0.0)
+  - FirebaseInstanceID (4.2.5):
+    - FirebaseCore (~> 6.0)
+    - GoogleUtilities/Environment (~> 6.0)
+    - GoogleUtilities/UserDefaults (~> 6.0)
+  - FirebaseMessaging (4.1.5):
+    - FirebaseAnalyticsInterop (~> 1.3)
+    - FirebaseCore (~> 6.2)
+    - FirebaseInstanceID (~> 4.1)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.2)
+    - GoogleUtilities/Environment (~> 6.2)
+    - GoogleUtilities/Reachability (~> 6.2)
+    - GoogleUtilities/UserDefaults (~> 6.2)
+    - Protobuf (~> 3.1)
+  - GoogleAppMeasurement (6.1.2):
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
+    - GoogleUtilities/MethodSwizzler (~> 6.0)
+    - GoogleUtilities/Network (~> 6.0)
+    - "GoogleUtilities/NSData+zlib (~> 6.0)"
+    - nanopb (~> 0.3)
+  - GoogleDataTransport (2.0.0)
+  - GoogleDataTransportCCTSupport (1.1.0):
+    - GoogleDataTransport (~> 2.0)
+    - nanopb
+  - GoogleUtilities/AppDelegateSwizzler (6.3.0):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (6.3.0)
+  - GoogleUtilities/Logger (6.3.0):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/MethodSwizzler (6.3.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (6.3.0):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (6.3.0)"
+  - GoogleUtilities/Reachability (6.3.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (6.3.0):
+    - GoogleUtilities/Logger
+  - nanopb (0.3.901):
+    - nanopb/decode (= 0.3.901)
+    - nanopb/encode (= 0.3.901)
+  - nanopb/decode (0.3.901)
+  - nanopb/encode (0.3.901)
+  - Protobuf (3.9.2)
+  - React (0.11.0):
+    - React/Core (= 0.11.0)
+  - react-native-calendar-events (1.7.1):
+    - React
+  - react-native-maps (0.23.0):
+    - React
+  - React/Core (0.11.0)
+  - ReactNativePermissions (1.1.1):
+    - React
+  - RNDefaultPreference (1.3.2):
+    - React
+  - RNGestureHandler (1.1.0):
+    - React
+  - RNReanimated (1.0.0-alpha.12):
+    - React
+  - RNSVG (9.4.0):
+    - React
+  - RNVectorIcons (6.4.2):
+    - React
+
+DEPENDENCIES:
+  - Firebase/Analytics
+  - Firebase/Core
+  - Firebase/Messaging
+  - react-native-calendar-events (from `../node_modules/react-native-calendar-events`)
+  - react-native-maps (from `../node_modules/react-native-maps`)
+  - ReactNativePermissions (from `../node_modules/react-native-permissions`)
+  - RNDefaultPreference (from `../node_modules/react-native-default-preference`)
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
+  - RNSVG (from `../node_modules/react-native-svg`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Firebase
+    - FirebaseAnalytics
+    - FirebaseAnalyticsInterop
+    - FirebaseCore
+    - FirebaseCoreDiagnostics
+    - FirebaseCoreDiagnosticsInterop
+    - FirebaseInstanceID
+    - FirebaseMessaging
+    - GoogleAppMeasurement
+    - GoogleDataTransport
+    - GoogleDataTransportCCTSupport
+    - GoogleUtilities
+    - nanopb
+    - Protobuf
+    - React
+
+EXTERNAL SOURCES:
+  react-native-calendar-events:
+    :path: "../node_modules/react-native-calendar-events"
+  react-native-maps:
+    :path: "../node_modules/react-native-maps"
+  ReactNativePermissions:
+    :path: "../node_modules/react-native-permissions"
+  RNDefaultPreference:
+    :path: "../node_modules/react-native-default-preference"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
+
+SPEC CHECKSUMS:
+  Firebase: 2d750c54cda57d5a6ae31212cfe5cc813c6be7e4
+  FirebaseAnalytics: 5d9ccbf46ed25d3ec9304d263f85bddf1e93e2d2
+  FirebaseAnalyticsInterop: d48b6ab67bcf016a05e55b71fc39c61c0cb6b7f3
+  FirebaseCore: 8b2765c445d40db7137989b7146a3aa3f91b5529
+  FirebaseCoreDiagnostics: be4f7a09d02ab305f18de59a470412caddb64c2a
+  FirebaseCoreDiagnosticsInterop: 6829da2b8d1fc795ff1bd99df751d3788035d2cb
+  FirebaseInstanceID: 550df9be1f99f751d8fcde3ac342a1e21a0e6c42
+  FirebaseMessaging: b22b949cc45c14da01e60404dd7bffc78956380c
+  GoogleAppMeasurement: 0ae90be1cc4dad40f4a27fc767ef59fa032ec87b
+  GoogleDataTransport: c8617c00e4f3eb9418e42ac0e8ac5241a9d555dd
+  GoogleDataTransportCCTSupport: 9f352523e8785a71f6754f51eeff09f49ec19268
+  GoogleUtilities: 9c2c544202301110b29f7974a82e77fdcf12bf51
+  nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  Protobuf: 67fb42ba613def994e61854de2b3164f13790cc4
+  React: ab1a2e21deb34965c38328d5ec40cc7d12c6050a
+  react-native-calendar-events: df2f900611a3d63a88be2bfbf4126471b37cd32b
+  react-native-maps: 7525a32bcd025af8cf3b6c469af9b8758245db72
+  ReactNativePermissions: 2e324bb3baf12702e3ec27f76c8ae1158fa69fc6
+  RNDefaultPreference: 40b5706236ed0da99e1dcfc247aee4be4d58f91a
+  RNGestureHandler: b65d391f4f570178d657b99a16ec99d09b8656b0
+  RNReanimated: b7adc1a5e4eca563966cfcbd982429ebd70d6b17
+  RNSVG: 9cb6e958c4b6a1f58185ac72a350b148947d6fed
+  RNVectorIcons: 6607bd3a30291d0edb56f9bbe7ae411ee2b928b0
+
+PODFILE CHECKSUM: 0fbb15d9e394438af363922d84f403d5ea7db30f
+
+COCOAPODS: 1.6.1

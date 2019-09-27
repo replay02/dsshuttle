@@ -99,7 +99,7 @@ export default class UserMain extends Component {
             isLoadingNow: true
         })
 
-        var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/loginWithToken';
+        var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/loginWithToken';
 
         fetch(url, {
             method: 'POST',
@@ -163,7 +163,7 @@ export default class UserMain extends Component {
                 isLoadingNow: true
             })
 
-            var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/login';
+            var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/login';
 
             fetch(url, {
                 method: 'POST',

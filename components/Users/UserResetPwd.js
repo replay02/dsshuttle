@@ -96,7 +96,7 @@ export default class UserResetPwd extends Component {
         let isValid = this._checkValidInputValues(id, email);
 
         if (isValid) {
-            var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/resetPwd';
+            var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/resetPwd';
 
             this.setState({
                 isLoadingNow: true

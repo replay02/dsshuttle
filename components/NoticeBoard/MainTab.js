@@ -30,7 +30,7 @@ export default class MainTab extends Component {
 
     //data db select
     _boardList() {
-        var url = 'http://' + CommonConf.urlHost + ':8080/ss/api/boardcontents';
+        var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/boardcontents';
         console.log('kny_geturl', url);
 
         //data select
