@@ -1,1 +1,0 @@
-../../../../../node_modules/react-native-calendar-events/RNCalendarEvents.h

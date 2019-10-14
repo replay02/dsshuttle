@@ -3,6 +3,7 @@ package com.dsshuttle;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.art.ARTPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.horcrux.svg.SvgPackage;
 import com.calendarevents.CalendarEventsPackage;
@@ -34,6 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ARTPackage(),
             new RNFirebasePackage(),
             new RNFirebaseMessagingPackage(),
             new SvgPackage(),
