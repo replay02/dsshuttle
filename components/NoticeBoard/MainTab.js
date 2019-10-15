@@ -66,46 +66,20 @@ export default class MainTab extends Component {
   }
 
   //변경사항 발생시
-  componentWillUpdate() {
-    this._boardList();
-  }
+//   componentWillUpdate() {
+//     this._boardList();
+//   }
 
   _deleteClicked = selectedKey => {
     this.setState({
       selectedId: selectedKey,
       isDialogVisible: true
     });
-
-    // Alert.alert(
-    //   "111111",
-    //   selectedKey,
-
-    //   // <TextInput
-    //   //   secureTextEntry
-    //   //   numberOfLines={1}
-    //   //   maxLength={20}
-    //   //   placeholder="비밀번호를 입력하세요."
-    //   // />,
-    //   [
-    //     {
-    //       text: "취소"
-    //     },
-    //     {
-    //       text: "확인"
-    //       // onPress: () => this._removeText()
-    //       // if() {
-    //       //   onPress: () => this._removeText()
-    //       // }
-    //     }
-    //   ],
-    //   { cancelable: false }
-    // );
   };
 
   _remove = inputText => {
     //const _this = this;
-    var url = "http://" + CommonConf.urlHost + ":8088/ss/api/boardcontents/";
-    // var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/deleteAllboardcontents/';
+    var url = "http://" + CommonConf.urlHost + ":8088/ss/api/deleteBoardcontents/";
 
     fetch(url, {
       method: "DELETE",
@@ -140,43 +114,6 @@ export default class MainTab extends Component {
       .catch(error => {
         Alert.alert(error);
       });
-
-    // fetch(url, {
-    //   method: "delete",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     "pwd" : this.state.pwd,
-    //     "_id" : this.state.selectedId
-    //   })
-    // })
-    //   .then(response => response.json())
-    //   .catch(err => {
-    //     Alert.alert(err);
-    //   })
-    //   .then(json => {
-    //     console.log("kny_insert_json:", json);
-
-    //     if (json.resCode == 200) {
-    //       //정상
-
-    //       Alert.alert(
-    //         "삭제 완료",
-    //         "선택한 글이 정상적으로 삭제되었습니다.",
-    //         [
-    //           {
-    //             text: "확인",
-    //             onPress: () => this.props.navigation.goBack()
-    //           }
-    //         ],
-    //         { cancelable: false }
-    //       );
-    //     } else {
-    //       Alert.alert(json.error);
-    //     }
-    //   });
   };
 
   showDialog = bool => {

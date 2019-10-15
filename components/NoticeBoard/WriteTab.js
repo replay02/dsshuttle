@@ -23,16 +23,11 @@ export default class WriteTab extends Component {
         )
     }
 
-
     //글등록
     _goAddBtn = () => {
-
         const { writer, password, content } = this.state;
-
-        var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/boardcontents';
+        var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/saveBoardcontents';
         console.log("kny_posturl", url);
-
-        
         fetch(url, {
             method: 'POST',
             headers: {
