@@ -120,14 +120,22 @@ export default class ItemReg extends Component {
             Alert.alert("수신자의 이름과 전화번호를 먼저 확인해주세요");
             return;
         }
-        var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/register/';
+        var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/sendStuff/';
         // let token = 'epHnI1L2T18:APA91bGGA7xuyCBgsi0ORjnVRKgH8Sl4nYOB0jmTHaS0NgEYGl_1rThL9Ie9RwGP4GIWabQxACCYSffB9Nu8iVAjekqNWGgEATLhwL_q5kHWYuAIGIck_EI2LVJSryWml4Ig_xL_4sht';
 
-        url = url + this.state.toToken;
+        // url = url + this.state.toToken;
 
         console.log(url);
 
-        fetch(url).then(response => response.json())
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "token": this.state.toToken
+            })}).then(response => response.json())
             .then(json => {
                 console.log(json);
 

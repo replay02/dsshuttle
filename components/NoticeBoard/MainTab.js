@@ -79,7 +79,7 @@ export default class MainTab extends Component {
 
   _remove = inputText => {
     //const _this = this;
-    var url = "http://" + CommonConf.urlHost + ":8088/ss/api/deleteBoardcontents/";
+    var url = "http://" + CommonConf.urlHost + ":8088/ss/api/deleteBoardcontents";
 
     fetch(url, {
       method: "DELETE",
