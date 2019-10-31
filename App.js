@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Animated, View, Dimensions } from 'react-native';
+import { Animated, Alert, View, Dimensions,Platform } from 'react-native';
 import { createStackNavigator, createAppContainer, createSwitchNavigator } from 'react-navigation';
 
 import BigShuttleMapBase from './components/BigShuttle/BigShuttleMapBase';
@@ -21,6 +21,7 @@ import SettingMain from './components/Setting/SettingMain';
 import SettingSub from './components/Setting/SettingSub';
 import UserChangePwd from './components/Users/UserChangePwd';
 import firebase  from './components/Push/Firebase';
+// import { platform } from 'os';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -160,21 +161,69 @@ export default class App extends React.Component {
   };
 
 
-  async _listenForNotifications(){
+  _listenForNotifications() {
     // onNotificationDisplayed - ios only
 
     this.notificationListener = firebase.notifications().onNotification((notification) => {
-      console.log('onNotification', notification);
-    });
 
+      // if (Platform.OS === 'android') {
+      //   notification.android.setChannelId("SS").android.setPriority(firebase.notifications.Android.Priority.High).android.setVibrate(500)
+      // }
+      
+      console.log('onNotification', notification);
+      Alert.alert(notification.title, notification.body);
+    });
+    
     this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
         console.log('onNotificationOpened', notificationOpen);
+       
+        if (Platform.OS === 'android') {
+          Alert.alert(notificationOpen.notification.data.title, notificationOpen.notification.data.body);
+        }
+        else {
+          Alert.alert(notificationOpen.notification.title, notificationOpen.notification.body);
+        }
+        
     });
 
-    const notificationOpen = await firebase.notifications().getInitialNotification();
-    if (notificationOpen) {
-        console.log('getInitialNotification', notificationOpen);
-    }
+
+
+
+    // background message listener
+    // this.messageListener = firebase.messaging().onMessage((message) => {
+    //   // Process your message as required
+    //   // This listener is called with the app activated
+    //   console.log(message);
+    //   Alert.alert("44444");
+    // });
+
+    // const notificationOpen = await firebase.notifications().getInitialNotification();
+    // if (notificationOpen) {
+    //     console.log('getInitialNotification', notificationOpen);
+    //     Alert.alert("1" + notificationOpen.notification.body);
+    // }
+
+    // firebase.notifications().getInitialNotification()
+    //   .then((notificationOpen) => {
+    //     if (notificationOpen) {
+    //       // App was opened by a notification
+    //       // Get the action triggered by the notification being opened
+    //       const action = notificationOpen.action;
+    //       // Get information about the notification that was opened
+    //       const notification = notificationOpen.notification;  
+    //     }
+    //   })
+    //   .catch(error => {
+    //     // User has rejected permissions  
+    //   });
+
+  }
+  
+  componentWillUnmount(){
+    this.notificationListener();
+    this.notificationOpenedListener();
+    // this.notificationDisplayListener();
+    // this.messageListener();
   }
   
   componentDidMount() {
@@ -195,7 +244,41 @@ export default class App extends React.Component {
         }),
       2000
     );
+
+    this._checkPermission();
+    this._listenForNotifications();
+    
   }
+
+  async _checkPermission(){
+
+    try {
+      const enabled = await firebase.messaging().hasPermission();
+      if (enabled) {
+          // user has permissions
+          console.log(enabled);
+          // this._updateTokenToServer();
+      } else {
+          // user doesn't have permission
+          this._requestPermission();
+      }
+    }
+    catch (error) {
+
+    }
+  }
+
+  async _requestPermission(){
+    try {
+      // User has authorised
+      await firebase.messaging().requestPermission();
+      // await this._updateTokenToServer();
+    } catch (error) {
+        // User has rejected permissions
+        alert("you can't handle push notification");
+    }
+  }
+
 
   _loginCompleteCallback = () => {
     this.setState({

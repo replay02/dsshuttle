@@ -65,10 +65,12 @@ export default class MainTab extends Component {
     this._boardList();
   }
 
-  //변경사항 발생시
-//   componentWillUpdate() {
-//     this._boardList();
-//   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.navigation.state.params.refresh) {
+      // Alert.alert("111111");
+      this._boardList();
+    }
+  }
 
   _deleteClicked = selectedKey => {
     this.setState({
@@ -79,7 +81,8 @@ export default class MainTab extends Component {
 
   _remove = inputText => {
     //const _this = this;
-    var url = "http://" + CommonConf.urlHost + ":8088/ss/api/deleteBoardcontents";
+    var url =
+      "http://" + CommonConf.urlHost + ":8088/ss/api/deleteBoardcontents";
 
     fetch(url, {
       method: "DELETE",
@@ -132,7 +135,7 @@ export default class MainTab extends Component {
 
   render() {
     return (
-      <SafeAreaView forceInset={{ bottom: "never", top: "never" }}>
+      <SafeAreaView forceInset={{ bottom: "always", top: "never" }}>
         <DialogInput
           isDialogVisible={this.state.isDialogVisible}
           title={"삭제"}
@@ -147,9 +150,10 @@ export default class MainTab extends Component {
           // onPress={ ()=>this._removeText()}
         ></DialogInput>
 
-        <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
-          <Container style={styles.container}>
-            <Content>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{flexGrow: 1 }}
+          keyboardShouldPersistTaps="never"
+        >
               {//state.feeds배열 map함수로 루프돌며 NoticeComponent의 data에 각 피드 항목 데이터 전달
               this.state.feeds.map(feed => (
                 <NoticeComponent
@@ -158,8 +162,7 @@ export default class MainTab extends Component {
                   deleteClicked={this._deleteClicked}
                 />
               ))}
-            </Content>
-          </Container>
+       
         </KeyboardAwareScrollView>
       </SafeAreaView>
     );

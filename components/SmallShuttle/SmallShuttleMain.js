@@ -12,83 +12,83 @@ import AndroidOpenSettings from 'react-native-android-open-settings'
 
 const Tab1 = 'bundangToBangbae'
 const Tab2 = 'bangbaeToBundang'
+
 const shuttleTimes = {
     bundang: [
         {
-            title: '09:00',
-            isAvailable: true
-        },
-        {
-            title: '10:00',
-            isAvailable: true
-        },
-        {
-            title: '11:00',
-            isAvailable: true
-        },
-        {
-            title: '13:00',
+            title: '정보가져오는중',
             isAvailable: false
-        },
-        {
-            title: '14:00',
-            isAvailable: true
-        },
-        {
-            title: '15:00',
-            isAvailable: true
-        },
-        {
-            title: '16:00',
-            isAvailable: true
-        },
-        {
-            title: '17:00',
-            isAvailable: true
-        },
+        }
+        // {
+        //     title: '10:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '11:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '13:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '14:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '15:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '16:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '17:00',
+        //     isAvailable: false
+        // },
     ],
     bangbae: [
         {
-            title: '09:00',
-            isAvailable: true
-        },
-        {
-            title: '10:00',
-            isAvailable: true
-        },
-        {
-            title: '11:00',
-            isAvailable: true
-        },
-        {
-            title: '13:00',
-            isAvailable: true
-        },
-        {
-            title: '14:00',
-            isAvailable: true
-        },
-        {
-            title: '15:00',
-            isAvailable: true
-        },
-        {
-            title: '16:00',
-            isAvailable: true
-        },
-        {
-            title: '17:00',
+            title: '정보가져오는중',
             isAvailable: false
-        },
+        }
+        // {
+        //     title: '10:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '11:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '13:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '14:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '15:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '16:00',
+        //     isAvailable: false
+        // },
+        // {
+        //     title: '17:00',
+        //     isAvailable: false
+        // },
     ]
 }
 
 export default class SmallShuttleMain extends Component {
     _panel;
-
     static defaultProps = {
         draggableRange: {
-            top: 280 + 50,  // + tab height : 50
+            top: 270,  // + tab height : 50
             bottom: 0
         },
         type: Tab1
@@ -109,30 +109,75 @@ export default class SmallShuttleMain extends Component {
 
     state = {
         _clickedIndex: 0,
-        refreshing: false
+        refreshing: false,
+        shuttleTimes: shuttleTimes
     }
 
+
+    _getShuttleTimes = (isRefresh) => {
+        var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/getSasongList';
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).then(response => response.json()).then(json => {
+            console.log(json);
+
+            if (json.resCode == 200) {  // 정상
+                this.setState({
+                    shuttleTimes: json.resData[0]
+                })
+            }
+            else {
+                Alert.alert(json.resMsg);
+            }
+            
+            if(isRefresh) {
+                this.setState({
+                    refreshing: false
+                })
+            }
+
+        }).catch(error => {
+            Alert.alert(error.toString());
+
+            if(isRefresh) {
+                this.setState({
+                    refreshing: false
+                })
+            }
+        });
+    }
 
     componentWillReceiveProps(nextProps) {
     }
 
     componentDidMount() {
-        this.setState({
-
-        });
+        this._getShuttleTimes(false);
     }
+
+
+    
+   
 
     //운반물품 등록 dy
     _goItemReg = (data,location) => {
+
+        this._panel.hide();
         this.props.navigation.navigate('ItemReg', {data:data,location:location}) 
     }
 
     //운반물품 조회 dy
      _goItemList = (timeData,location) => {
+
+        this._panel.hide();
         this.props.navigation.navigate('ItemList',{timeData:timeData,location:location})
     }
 
     _onMenuClicked = (index) => {
+        this._panel.hide();
         Alert.alert('_onMenuClicked' + index);
     }
 
@@ -413,7 +458,7 @@ export default class SmallShuttleMain extends Component {
 
                 {!item.isAvailable?
                     <Text style={[styles.centerSubTextStyle, { color: '#5e5e5e' }]}>
-                        {item.title + ' 운행안함'}
+                        {item.title==="정보가져오는중"?item.title:item.title + ' 운행안함'}
                     </Text>
                     :
                     <Text style={styles.centerTextStyle}>
@@ -441,20 +486,19 @@ export default class SmallShuttleMain extends Component {
 
 
     _onRefresh = () => {
-        // somethis Todo
-        // setTimeout(function () {
 
-        // }, 1000);
+        let _this = this;
+        this.setState({
+            shuttleTimes : shuttleTimes
+        });
 
-
-        this.setState(state => ({
-            // ...state,
-            refreshing: false
-        }))
+        setTimeout(function () {
+            _this._getShuttleTimes(true);
+        }, 1000);
     }
 
     render() {
-        const { _clickedIndex, refreshing } = this.state;
+        const { _clickedIndex, refreshing, shuttleTimes } = this.state;
         const { type } = this.props;
 
         let isTab2 = false;
@@ -540,7 +584,7 @@ export default class SmallShuttleMain extends Component {
                                 }}>운반물품 조회</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 30, flexDirection: 'row', height: 40, marginTop: 10 }}
+                            {/* <TouchableOpacity style={{ alignItems: 'center', marginLeft: 30, flexDirection: 'row', height: 40, marginTop: 10 }}
                                 activeOpacity={0.3}
                                 onPress={() => this._onMenuClicked(2)}>
                                 <Icon style={{
@@ -557,7 +601,7 @@ export default class SmallShuttleMain extends Component {
                                     fontSize: 14,
                                     textAlign: 'left'
                                 }}>탑승자정보 작성</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                         {/* <View style={[styles.container]}>
                         </View> */}
@@ -608,8 +652,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
     },
-
-
     row: {
         flex: 1,
         padding: 10,

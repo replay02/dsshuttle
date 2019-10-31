@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "123915951549",
+    "firebase_url": "https://dsshuttlepush.firebaseio.com",
+    "project_id": "dsshuttlepush",
+    "storage_bucket": "dsshuttlepush.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123915951549:android:ac6dd6f5f2486ba04c86d4",
+        "android_client_info": {
+          "package_name": "com.dsshuttle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123915951549-kjqnqqa1t6o4ei2cg3abh19ijpehudk9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDStIEVGhrPXn2Wgw71APunnDMAqdcR8lU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123915951549-kjqnqqa1t6o4ei2cg3abh19ijpehudk9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

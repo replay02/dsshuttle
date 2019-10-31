@@ -8,24 +8,6 @@ target 'dsshuttle' do
 
   # Pods for dsshuttle
 
-  pod 'Firebase/Core'
-  pod 'Firebase/Messaging'
-  pod 'Firebase/Analytics'
-  
-  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
-
-  pod 'react-native-calendar-events', :path => '../node_modules/react-native-calendar-events'
-
-  pod 'RNDefaultPreference', :path => '../node_modules/react-native-default-preference'
-
-  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
-
-  pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
-
-  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
-
-  pod 'RNSVG', :path => '../node_modules/react-native-svg'
-
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+  pod 'Firebase/Messaging', '~> 6.3.0'
 
 end

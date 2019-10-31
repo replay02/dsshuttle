@@ -90,11 +90,13 @@ export default class ShuttleMain extends Component {
       }
     );
 
-    firebase.messaging().getToken().then((token) => {
+    firebase.messaging().getToken().then(function(token) {
        this._onChangeToken(token)
+    }).catch(function(error) {
+
     });
 
-    firebase.messaging().onTokenRefresh((token) => {
+    firebase.messaging().onTokenRefresh(token => {
         this._onChangeToken(token)
     });
 
@@ -287,7 +289,8 @@ export default class ShuttleMain extends Component {
         this.setState({
           addr: retVal
         });
-      });
+      })
+      .catch(error => {});
   };
 
   renderItem = item => {

@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>204433376828-1kbict6no8vfqlj7k882b6913ns93jdt.apps.googleusercontent.com</string>
+	<string>123915951549-nvvgmr5gees87nnmumql52cci9fiqvib.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.204433376828-1kbict6no8vfqlj7k882b6913ns93jdt</string>
+	<string>com.googleusercontent.apps.123915951549-nvvgmr5gees87nnmumql52cci9fiqvib</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAWmNscVlipz8_3Io8X3i19TGGp0QpLD2E</string>
+	<string>AIzaSyASNRrrdGPtCp8lG8Gd8D6AOR71LGTvQk0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>204433376828</string>
+	<string>123915951549</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.dsshuttle</string>
+	<string>com.ktds.dsshuttle</string>
 	<key>PROJECT_ID</key>
-	<string>dsshuttle-5a91e</string>
+	<string>dsshuttlepush</string>
 	<key>STORAGE_BUCKET</key>
-	<string>dsshuttle-5a91e.appspot.com</string>
+	<string>dsshuttlepush.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:204433376828:ios:f4c231a1abd4c2c0586539</string>
+	<string>1:123915951549:ios:f3bbc947a6141cc84c86d4</string>
 	<key>DATABASE_URL</key>
-	<string>https://dsshuttle-5a91e.firebaseio.com</string>
+	<string>https://dsshuttlepush.firebaseio.com</string>
 </dict>
 </plist>
