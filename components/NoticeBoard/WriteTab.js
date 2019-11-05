@@ -29,7 +29,8 @@ export default class WriteTab extends Component {
         name="lead-pencil"
         size={30}
       />
-    )
+    ),
+    tabBarLabel:"글쓰기"
   };
 
   //글등록
@@ -171,8 +172,8 @@ export default class WriteTab extends Component {
                 placeholder="내용을 입력하세요."
                 autoCorrect={false}
                 value={this.state.content}
-                multiline
-                numberOfLines={10}
+                multiline={true}
+                numberOfLines={100}
                 onFocus={event => {
                   // `bind` the function if you're using ES6 classes
                   this._scrollToInput(ReactNative.findNodeHandle(event.target));

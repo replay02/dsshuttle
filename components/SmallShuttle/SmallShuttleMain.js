@@ -127,7 +127,7 @@ export default class SmallShuttleMain extends Component {
 
             if (json.resCode == 200) {  // 정상
                 this.setState({
-                    shuttleTimes: json.resData[0]
+                    shuttleTimes: json.resData
                 })
             }
             else {
@@ -603,12 +603,9 @@ export default class SmallShuttleMain extends Component {
                                 }}>탑승자정보 작성</Text>
                             </TouchableOpacity> */}
                         </View>
-                        {/* <View style={[styles.container]}>
-                        </View> */}
                     </SafeAreaView>
                 </SlidingUpPanel>
-
-            </View >
+            </View>
         );
     }
 }

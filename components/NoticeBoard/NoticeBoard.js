@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import {
   createBottomTabNavigator,
   createAppContainer,
@@ -9,6 +9,7 @@ import {
 import MainTab from "./MainTab";
 import WriteTab from "./WriteTab";
 import SafeAreaView from "react-native-safe-area-view";
+
 //하단 네비게이션
 const NbTabNavigator = createMaterialTopTabNavigator(
   {
@@ -16,15 +17,15 @@ const NbTabNavigator = createMaterialTopTabNavigator(
     WriteTab: { screen: WriteTab }
   },
   {
-    animationEnabled: true,
-    swipeEnabled: true,
+    animationEnabled: false,
+    swipeEnabled: false,
     tabBarPosition: "bottom",
     tabBarOptions: {
       iconStyle: { height: 30 },
-      activeTintColor: "#000000",
-      inactiveTintColor: "#FFFFFF",
+      activeTintColor: "#FFFFFF",
+      inactiveTintColor: "#333333",
       upperCaseLabel: false,
-      showLabel: false,
+      showLabel: true,
       showIcon: true,
 
       tabStyle: {
@@ -52,10 +53,7 @@ export default class NoticeBoard extends Component {
   };
 
   render() {
-    return (
-
-        <NbTabContainer />
-    );
+    return <NbTabContainer />;
   }
 }
 

@@ -249,7 +249,7 @@ export default class SettingMain extends React.Component {
 
           </CardView>
 
-          <Text style={[styles.titleText, { marginTop: 15 }]}>일반</Text>
+          {/* <Text style={[styles.titleText, { marginTop: 15 }]}>일반</Text>
           <CardView
             cardElevation={1}
             cardMaxElevation={1}
@@ -270,7 +270,7 @@ export default class SettingMain extends React.Component {
               <Icon style={{ marginLeft: 15 }} name="account-outline" size={30} color="#000" />
               <Text style={styles.mainText}>앱버전</Text>
             </TouchableOpacity>
-          </CardView>
+          </CardView> */}
         </View>
       </View>
     );

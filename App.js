@@ -3,7 +3,7 @@ import { Animated, Alert, View, Dimensions,Platform } from 'react-native';
 import { createStackNavigator, createAppContainer, createSwitchNavigator } from 'react-navigation';
 
 import BigShuttleMapBase from './components/BigShuttle/BigShuttleMapBase';
-import ShuttleTab from './components/Main/ShuttleTab';
+import ShuttleTab from './components/SmallShuttle/ShuttleTab';
 import ShuttleMain from './components/Main/ShuttleMain';
 import BigShuttleMain from './components/BigShuttle/BigShuttleMain';
 import UserMain from './components/Users/UserMain';

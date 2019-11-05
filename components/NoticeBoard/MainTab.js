@@ -26,7 +26,8 @@ export default class MainTab extends Component {
         name="home"
         size={25}
       />
-    )
+    ),
+    tabBarLabel:"게시판"
   };
 
   state = {
@@ -135,7 +136,7 @@ export default class MainTab extends Component {
 
   render() {
     return (
-      <SafeAreaView forceInset={{ bottom: "always", top: "never" }}>
+      <View style={{flex:1}}>
         <DialogInput
           isDialogVisible={this.state.isDialogVisible}
           title={"삭제"}
@@ -151,20 +152,19 @@ export default class MainTab extends Component {
         ></DialogInput>
 
         <KeyboardAwareScrollView
-          contentContainerStyle={{flexGrow: 1 }}
+          contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="never"
         >
-              {//state.feeds배열 map함수로 루프돌며 NoticeComponent의 data에 각 피드 항목 데이터 전달
-              this.state.feeds.map(feed => (
-                <NoticeComponent
-                  key={this._keyExtractor}
-                  data={feed}
-                  deleteClicked={this._deleteClicked}
-                />
-              ))}
-       
+          {//state.feeds배열 map함수로 루프돌며 NoticeComponent의 data에 각 피드 항목 데이터 전달
+          this.state.feeds.map(feed => (
+            <NoticeComponent
+              key={this._keyExtractor}
+              data={feed}
+              deleteClicked={this._deleteClicked}
+            />
+          ))}
         </KeyboardAwareScrollView>
-      </SafeAreaView>
+      </View>
     );
   }
 }
