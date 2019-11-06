@@ -89,10 +89,12 @@ export default class ShuttleMain extends Component {
         });
       }
     );
-
+    const _this = this;
     firebase.messaging().getToken().then(function(token) {
-       this._onChangeToken(token)
+       _this._onChangeToken(token)
     }).catch(function(error) {
+
+      Alert.alert("error : " + error.toString());
 
     });
 

@@ -141,6 +141,11 @@ export default class ItemReg extends Component {
       return;
     }
 
+    if (this.state.toToken == null || this.state.toToken.length == 0) {
+        Alert.alert("수신자의 Push토큰을 확인 할 수 없습니다. (수신자가 Push알림에 동의하지 않았거나 Push알림을 받을 수 없는 상태일 수 있습니다.)");
+        return;
+      }
+
     DefaultPreference.get(CommonConf.PREF_KEY_LOGIN_TOKEN)
       .then(function(login_token) {
         // Alert.alert(login_token);
