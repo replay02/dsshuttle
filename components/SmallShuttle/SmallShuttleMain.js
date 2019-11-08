@@ -423,8 +423,8 @@ export default class SmallShuttleMain extends Component {
         if (t2.format('HH:mm') > t1.format('HH:mm'))
             retVal = true;
 
-        return retVal;
-        // return false;
+        // return retVal;
+        return false;
     }
 
     _renderItem = (item, index, isTab2) => {

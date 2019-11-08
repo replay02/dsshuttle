@@ -19,6 +19,8 @@ import "moment/locale/ko";
 // import { RectButton } from 'react-native-gesture-handler';
 import SafeAreaView from "react-native-safe-area-view";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Ionicons from "react-native-vector-icons/Ionicons";
+
 import CardView from "react-native-cardview";
 
 import Weather from "./Weather";
@@ -26,14 +28,14 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const API_KEY = "056222ceae9bf6dc96aa6c52a14985c6";
-const API_KEY_GEO = "AIzaSyBRZawBb4awd9BNC4EmlSYRRGY5bACLt5E";  // 유료 문제 사용 안함
+const API_KEY_GEO = "AIzaSyBRZawBb4awd9BNC4EmlSYRRGY5bACLt5E"; // 유료 문제 사용 안함
 
 const menuTitles = ["사송", "셔틀", "게시판", "기사님 정보", "기타"];
 const safearewHeaderHeight = Platform.OS === "android" ? 0 : 44;
 
-import firebase  from '../Push/Firebase';
-import CommonConf  from '../Datas/CommonConf';
-import DefaultPreference from 'react-native-default-preference';
+import firebase from "../Push/Firebase";
+import CommonConf from "../Datas/CommonConf";
+import DefaultPreference from "react-native-default-preference";
 
 import Carousel, { Pagination } from "react-native-snap-carousel";
 
@@ -53,7 +55,8 @@ export default class ShuttleMain extends Component {
     icon: null,
     weatherMap: null,
     weatherArray: null,
-    activeSlide: 0
+    activeSlide: 0,
+    notiDatas: []
   };
 
   static navigationOptions = {
@@ -67,6 +70,44 @@ export default class ShuttleMain extends Component {
       fontWeight: "bold",
       color: "#fff"
     }
+  };
+
+  _getNotification = () => {
+    var url = "http://" + CommonConf.urlHost + ":8088/ss/api/getPushNoti";
+    const _this = this;
+    DefaultPreference.get(CommonConf.PREF_KEY_LOGIN_TOKEN).then(function(
+      login_token
+    ) {
+      if (login_token) {
+        fetch(url, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            login_token: login_token
+          })
+        })
+          .then(response => response.json())
+          .then(json => {
+            console.log(json);
+
+            if (json.resCode == 200) {
+              // 정상
+              _this.setState({
+                notiDatas: json.resData
+              });
+              // Alert.alert(json.resData[0].message);
+            } else {
+              Alert.alert(json.resMsg);
+            }
+          })
+          .catch(error => {
+            Alert.alert(error.toString());
+          });
+      }
+    });
   };
 
   componentDidMount() {
@@ -90,63 +131,68 @@ export default class ShuttleMain extends Component {
       }
     );
     const _this = this;
-    firebase.messaging().getToken().then(function(token) {
-       _this._onChangeToken(token)
-    }).catch(function(error) {
-
-      Alert.alert("error : " + error.toString());
-
-    });
+    firebase
+      .messaging()
+      .getToken()
+      .then(function(token) {
+        _this._onChangeToken(token);
+      })
+      .catch(function(error) {
+        Alert.alert("error : " + error.toString());
+      });
 
     firebase.messaging().onTokenRefresh(token => {
-        this._onChangeToken(token)
+      this._onChangeToken(token);
     });
 
-    
-
+    this._getNotification();
   }
 
   // push token 갱신
-  _onChangeToken= (token) => {
-
-    DefaultPreference.get(CommonConf.PREF_KEY_LOGIN_TOKEN).then(function (login_token) {
-
-      if (login_token) { 
-        var url = 'http://' + CommonConf.urlHost + ':8088/ss/api/regiPushToken';
+  _onChangeToken = token => {
+    DefaultPreference.get(CommonConf.PREF_KEY_LOGIN_TOKEN).then(function(
+      login_token
+    ) {
+      if (login_token) {
+        var url = "http://" + CommonConf.urlHost + ":8088/ss/api/regiPushToken";
         fetch(url, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "login_token": login_token,
-                "push_token": token
-            }),
-        }).then(response => response.json()).then(json => {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            login_token: login_token,
+            push_token: token
+          })
+        })
+          .then(response => response.json())
+          .then(json => {
             console.log(json);
-    
+
             if (json.resCode != 200) {
-                Alert.alert(json.resMsg);
-                // this.setState({
-                //     isLoadingNow: false
-                // });
+              Alert.alert(json.resMsg);
+              // this.setState({
+              //     isLoadingNow: false
+              // });
+            } else {
+              // this.setState({
+              //     isLoadingNow: false
+              // });
+              // Alert.alert(json.resMsg);
+              // Alert.alert(json.login_token);
             }
-            else {
-                // this.setState({
-                //     isLoadingNow: false
-                // });
-                // Alert.alert(json.resMsg);
-                // Alert.alert(json.login_token);
-            }
-        }).catch(error => {
-            Alert.alert("서버 통신 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
+          })
+          .catch(error => {
+            Alert.alert(
+              "서버 통신 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요."
+            );
             // this.setState({
             //     isLoadingNow: false
             // })
-        });
+          });
       }
-    })
+    });
   };
 
   // 사송
@@ -159,7 +205,7 @@ export default class ShuttleMain extends Component {
   };
   // 게시판
   _goCommonNotice = () => {
-    this.props.navigation.navigate('NoticeBoard')
+    this.props.navigation.navigate("NoticeBoard");
   };
 
   // 기사님정보
@@ -271,7 +317,7 @@ export default class ShuttleMain extends Component {
       lon +
       "&language=ko&key=" +
       API_KEY_GEO;
-    console.log("geo url  : "+url);
+    console.log("geo url  : " + url);
 
     // Alert.alert(url);
 
@@ -296,9 +342,8 @@ export default class ShuttleMain extends Component {
   };
 
   renderItem = item => {
-
     console.log("render item : " + item.index);
-    
+
     const { isLoadingNow, weatherMap, temp, myWeather } = this.state;
 
     let data = weatherMap.get(item.item);
@@ -368,10 +413,9 @@ export default class ShuttleMain extends Component {
     return (
       <SafeAreaView
         forceInset={{ bottom: "always", top: "always" }}
-        style={styles.container} >
-
-        <View style={[styles.image, , { backgroundColor: "#4baec5" }]} />
-
+        style={styles.container}
+      >
+        <View style={[styles.image, { backgroundColor: "#4baec5" }]} />
         <View
           style={{
             flexDirection: "row",
@@ -424,7 +468,8 @@ export default class ShuttleMain extends Component {
                   },
                   android: {}
                 })
-              }}/>
+              }}
+            />
 
             <Pagination
               dotsLength={weatherMap.size}
@@ -440,14 +485,16 @@ export default class ShuttleMain extends Component {
               inactiveDotStyle={{}}
               style={{ marginTop: -15, marginBottom: -15 }}
               inactiveDotOpacity={0.4}
-              inactiveDotScale={0.6} />
+              inactiveDotScale={0.6}
+            />
           </View>
         ) : (
           <View
             style={{
               flex: 0.7,
               justifyContent: "center"
-            }} >
+            }}
+          >
             <Progress.Circle
               thickness={8}
               style={{
@@ -456,29 +503,34 @@ export default class ShuttleMain extends Component {
                 alignSelf: "center"
               }}
               size={30}
-              indeterminate={true} />
+              indeterminate={true}
+            />
           </View>
         )}
 
         <View
-          style={{ flex: 0.3, justifyContent: "flex-end", paddingBottom: 15 }} >
+          style={{ flex: 0.3, justifyContent: "flex-end", paddingBottom: 15 }}
+        >
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
               flex: 0.33
-            }} >
+            }}
+          >
             <TouchableHighlight
               style={styles.button}
               onPress={() => this._goSmallShuttle()}
-              underlayColor="#ffffff55" >
+              underlayColor="#ffffff55"
+            >
               <Text style={[styles.buttonText]}>{menuTitles[0]}</Text>
             </TouchableHighlight>
 
             <TouchableHighlight
               style={styles.button}
               onPress={() => this._goBigShuttle()}
-              underlayColor="#ffffff55" >
+              underlayColor="#ffffff55"
+            >
               <Text style={[styles.buttonText]}>{menuTitles[1]}</Text>
             </TouchableHighlight>
           </View>
@@ -486,14 +538,16 @@ export default class ShuttleMain extends Component {
           <TouchableHighlight
             style={[styles.commonButton]}
             onPress={() => this._goCommonNotice()}
-            underlayColor="#ffffff55" >
+            underlayColor="#ffffff55"
+          >
             <Text style={[styles.buttonText]}>{menuTitles[2]}</Text>
           </TouchableHighlight>
 
           <TouchableHighlight
             style={[styles.commonButton]}
             onPress={() => this._goDriverInfo()}
-            underlayColor="#ffffff55" >
+            underlayColor="#ffffff55"
+          >
             <Text style={[styles.buttonText]}>{menuTitles[3]}</Text>
           </TouchableHighlight>
         </View>
@@ -501,13 +555,34 @@ export default class ShuttleMain extends Component {
         <TouchableOpacity
           style={styles.settingBtn}
           onPress={() => this.props.navigation.navigate("SettingMain")}
-          activeOpacity={0.7} >
+          activeOpacity={0.7}
+        >
           <Icon
             style={{ justifyContent: "center", alignItems: "center" }}
             name="settings"
             size={30}
-            color="#fff" />
+            color="#fff"
+          />
         </TouchableOpacity>
+
+        {this.state.notiDatas ? (
+          <TouchableOpacity
+            style={styles.notiAlarmBtn}
+            onPress={() =>
+              this.props.navigation.navigate("ItemList", {
+                data: this.state.notiDatas
+              })
+            }
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              style={{ justifyContent: "center", alignItems: "center" }}
+              name="md-notifications"
+              size={30}
+              color="#fff"
+            />
+          </TouchableOpacity>
+        ) : null}
       </SafeAreaView>
     );
   }
@@ -519,7 +594,15 @@ const styles = StyleSheet.create({
     height: 50,
     marginTop: 10
   },
-
+  notiAlarmBtn: {
+    height: 45,
+    position: "absolute",
+    width: 45,
+    marginLeft: 20,
+    alignItems: "flex-start",
+    alignSelf: "flex-start",
+    marginTop: 15 + safearewHeaderHeight
+  },
   settingBtn: {
     height: 45,
     position: "absolute",

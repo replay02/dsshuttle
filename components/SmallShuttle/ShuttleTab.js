@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Dimensions, View, StyleSheet } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
-import SmallShuttleMain from '../SmallShuttle/SmallShuttleMain';
+import SmallShuttleMain from './SmallShuttleMain';
 
 export default class ShuttleTab extends Component {
 

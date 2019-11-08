@@ -49,6 +49,7 @@ export default class ItemReg extends Component {
     data: this.props.navigation.state.params.data,
     location: this.props.navigation.state.params.location,
     toToken: "",
+    toId:"",
     isChecked: false,
     name: "",
     phone: "",
@@ -116,7 +117,8 @@ export default class ItemReg extends Component {
           // });
         } else {
           this.setState({
-            toToken: json.resData,
+            toToken: json.resData.push_token,
+            toId : json.resData.id,
             isChecked: true
           });
           Alert.alert("정상 확인 되었습니다");
@@ -177,6 +179,7 @@ export default class ItemReg extends Component {
             },
             body: JSON.stringify({
               token: _this.state.toToken,
+              toId: _this.state.toId,
               stuffs: checkedDataString,
               sendText: _this.state.sendText,
               time: _this.state.data,
@@ -188,9 +191,9 @@ export default class ItemReg extends Component {
             .then(json => {
               console.log(json);
 
-              if (json.resCode == 200) {
+            //   if (json.resCode == 200) {
                 Alert.alert(json.resMsg);
-              }
+            //   }
             })
             .catch(err => Alert.alert(err));
         }
