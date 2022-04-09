@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@react-native-community/art": "^1.0.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.23",
     "native-base": "^2.13.8",
     "react": "16.8.3",
